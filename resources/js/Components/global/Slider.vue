@@ -5,7 +5,7 @@
                 <img src="/images/icons/close.svg" alt=""/>
             </a>
             <div class="sidebar__head__logo">
-                <img src="#" alt="logo"/>
+                <img src="#/images/logo.png" alt="logo"/>
             </div>
             <div class="">
                 <img src="/images/icons/menu-ham.svg" alt="logo"/>

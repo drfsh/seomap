@@ -52,3 +52,21 @@
 .form-control,.form-control:hover{
     background: transparent;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+.w100{
+    width: 100%;
+}
+.btn-primary{
+    width: 100%;
+    border-radius: 8px;
+    height: 45px;
+    border: none;
+    background: #2f5bea;
+    color: white;
+}

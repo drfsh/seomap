@@ -25,9 +25,9 @@
                 />
                 <span>1</span>
             </Link>
-            <a href="#">
+            <Link :href="route('logout')" method="post">
                 <img src="/images/icons/exit.svg" alt="exit"/>
-            </a>
+            </Link>
 
         </div>
 

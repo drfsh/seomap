@@ -6,26 +6,28 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import AuthLayout from "@/Layouts/AuthLayout.vue";
+import {ref} from "vue";
 
 defineProps({
     canResetPassword: Boolean,
     status: String,
 });
-
+const step = ref(0)
 const form = useForm({
-    email: '',
-    password: '',
+    mobile: '',
+    code: '',
     remember: false,
 });
 
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+const sendCode = () => {
+    form.post(route('smsLogin'), {
+        // onFinish: () => form.reset('password'),
+        onSuccess: (data) =>{
+            console.log(data)
+        }
     });
 };
-const x = () => {
-  return form.email+"___"
-}
+
 </script>
 
 <template>
@@ -35,38 +37,47 @@ const x = () => {
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+        <div v-if="step===0">
+            <div class="text-center">
+                <div class="title">ورود / ثبت نام</div>
+                <div class="subtitle">لطفا شماره تلفن خود را وارد کنید</div>
             </div>
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <form @submit.prevent="sendCode">
+                <div class="w100">
+                    <input placeholder="09123456789" type="number" class="input">
+                    <InputError class="mt-2"  :message="form.errors.mobile" />
+                </div>
+                <div class="flex items-center justify-end mt-4">
+                    <button class="btn-primary" :disabled="form.processing">
+                        ورود
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div v-else-if="step===2">
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+            <div class="text-center">
+                <div class="title">ورود یا ثبت نام</div>
+                <div class="subtitle">کد تایید 4 رقمی ارسال شده به شماره همراه زیر را وارد نمایید</div>
             </div>
+            <div class="number-edit">
+                <span class="number">{{ $parent.mobile }}</span>
+                <span role="button" class="text" @click="step=0">
 
+                <span>ویرایش شماره</span>
+            </span>
+            </div>
+            <form @submit.prevent="sendCode">
+                <div class="w100">
+                    <input placeholder="09123456789" type="number" class="input">
+                    <InputError class="mt-2"  :message="form.errors.mobile" />
+                </div>
+                <div class="flex items-center justify-end mt-4">
+                    <button class="btn-primary" type="button" @click="step=2" :disabled="form.processing">
+                        ورود
+                    </button>
+                </div>
+            </form>
             <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
@@ -74,19 +85,6 @@ const x = () => {
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
+        </div>
     </AuthLayout>
 </template>

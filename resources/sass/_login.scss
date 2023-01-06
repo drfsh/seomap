@@ -1,0 +1,76 @@
+html,body{
+    height: 100%!important;
+}
+#app{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+}
+.login-page img{
+    height: 70px;
+    margin-bottom: 14px;
+}
+.login-page{
+    padding: 50px 88px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 26px -14px #c9c9c9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.input{
+    padding: 8px 15px;
+    border-radius: 7px;
+    border: none;
+    width: 240px;
+    background: #f0f0f0;
+}
+.login-page .title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 22px;
+    margin-top: 10px;
+}
+.login-page .subtitle{
+    margin-bottom: 32px;
+    font-size: 14px;
+    margin-top: 16px;
+}
+.info-req {
+    margin-top: 20px;
+    width: 328px;
+    line-height: 1.8;
+    color: #a9a9a9;
+    font-size: 14px;
+    text-align: center;
+}
+.info-req a{
+    color: black;
+}
+.number-edit .text svg {
+    width: 15px;
+    height: 15px
+}
+
+.number-edit .text {
+    display: flex;
+    align-items: center;
+    color: #d9b856;
+    cursor: pointer
+}
+
+.number-edit .number {
+    color: #094873
+}
+
+.number-edit {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px
+}
