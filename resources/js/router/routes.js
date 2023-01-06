@@ -1,10 +1,10 @@
-import Dashboard from "../layouts/Dashboard.vue";
+import Dashboard from "../Pages/Panel/Dashboard.vue";
 import {createWebHistory,createRouter} from 'vue-router'
-import Service from "../layouts/Service.vue";
-import Orders from "../layouts/Orders.vue";
-import Tickets from "../layouts/Tickets.vue";
-import Notifications from "../layouts/Notifications.vue";
-import profile from "../layouts/Profile.vue";
+import Service from "../Pages/Panel/Service.vue";
+import Orders from "../Pages/Panel/Orders.vue";
+import Tickets from "../Pages/Panel/Tickets.vue";
+import Notifications from "../Pages/Panel/Notifications.vue";
+import profile from "../Pages/Panel/Profile.vue";
 const routes = [
     {
         path:'/',

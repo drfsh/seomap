@@ -2,65 +2,66 @@
     <div class="sidebar close">
         <div class="sidebar__head">
             <a href="#" class="sidebar__head__close-menu">
-                <img src="/images/icons/close.svg" alt="" />
+                <img src="/images/icons/close.svg" alt=""/>
             </a>
             <div class="sidebar__head__logo">
-                <img src="#" alt="logo" />
+                <img src="#" alt="logo"/>
             </div>
             <div class="">
-                <img src="/images/icons/menu-ham.svg" alt="logo" />
+                <img src="/images/icons/menu-ham.svg" alt="logo"/>
             </div>
         </div>
         <div class="sidebar__body">
             <div class="sidebar__body__avatar">
-                <img src="/images/temp/avatar.png" alt="avatar" />
+                <img src="/images/temp/avatar.png" alt="avatar"/>
             </div>
             <div class="sidebar__body__user">
                 <div class="sidebar__body__user__name"> کاربر جدید سایت</div>
-                <hr />
+                <hr/>
                 <div class="sidebar__body__user__balance">
                     <span> اطلاعات حساب کاربری</span>
-                    <router-link :to="{name:'profile'}" class="increase"
+                    <Link :href="route('profile.edit')" class="increase"
                     ><img
                         src="/images/icons/edit-user.svg"
                         alt="increase balance"
-                    /></router-link>
+                    /></Link>
                 </div>
             </div>
 
             <ul class="sidebar__body__links">
                 <li>
-                    <router-link :to="{name:'panel'}">
+                    <Link :class="{active:$page.component==='Panel/Dashboard'}" :href="route('dashboard.view')">
                         <ic_dashboard></ic_dashboard>
                         داشبورد
-                    </router-link>
+                    </Link>
                 </li>
 
                 <li>
-                    <router-link :to="{name:'service'}">
+                    <Link :class="{active:$page.component==='Panel/Service'}" :href="route('service')">
+
                         <ic_list></ic_list>
                         ثبت سفارش
-                    </router-link>
+                    </Link>
                 </li>
                 <li>
-                    <router-link :to="{name:'Orders'}">
+                    <Link :class="{active:$page.component==='Panel/Orders'}" :href="route('orders.view')">
                         <ic_list_search></ic_list_search>
                         پیگیریسفارش
-                    </router-link>
+                    </Link>
                 </li>
 
                 <li>
-                    <router-link :to="{name:'tickets'}">
+                    <Link :class="{active:$page.component==='Panel/Tickets'}" :href="route('ticket.list')">
                         <ic_chats></ic_chats>
                         پشتیبانی
-                    </router-link>
+                    </Link>
                 </li>
 
                 <li>
-                    <router-link :to="{name:'notifications'}">
+                    <Link :class="{active:$page.component==='Panel/Notifications'}" :href="route('notification.list')">
                         <ic_bell></ic_bell>
                         اعلان ها
-                    </router-link>
+                    </Link>
                 </li>
 
 
@@ -68,22 +69,16 @@
 
             <a href="#" class="sidebar__body__logout">خروج از حساب کاربری</a>
         </div>
+
     </div>
 
 </template>
 
-<script>
+<script setup>
 import Ic_dashboard from "../svgs/ic_dashboard.vue";
 import Ic_list from "../svgs/ic_list.vue";
 import Ic_list_search from "../svgs/ic_list_search.vue";
 import Ic_bell from "../svgs/ic_bell.vue";
 import Ic_chats from "../svgs/ic_chats.vue";
-export default {
-    name: "Slider",
-    components: {Ic_chats, Ic_bell, Ic_list_search, Ic_list, Ic_dashboard}
-}
+import {Link} from '@inertiajs/inertia-vue3';
 </script>
-
-<style scoped>
-
-</style>

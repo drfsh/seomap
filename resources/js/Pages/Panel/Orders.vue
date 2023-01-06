@@ -1,5 +1,6 @@
 <template>
-    <div class="content__card">
+    <PanelLayout>
+        <div class="content__card">
         <div class="content__card__head">
             <h2 class="content__card__head__title">پیگیری سفارشات</h2>
         </div>
@@ -104,16 +105,15 @@
 
         </div>
     </div>
+    </PanelLayout>
 </template>
 
-<script>
-import Ic_list_2 from "../components/svgs/ic_list_2.vue";
-import Ic_check_square from "../components/svgs/ic_check_square.vue";
-import Ic_times_square from "../components/svgs/ic_times_square.vue";
-export default {
-    name: "Orders",
-    components: {Ic_times_square, Ic_check_square, Ic_list_2}
-}
+<script setup>
+
+import Ic_list_2 from "../../Components/svgs/ic_list_2.vue";
+import Ic_check_square from "../../Components/svgs/ic_check_square.vue";
+import Ic_times_square from "../../Components/svgs/ic_times_square.vue";
+import PanelLayout from "@/Layouts/PanelLayout.vue";
 </script>
 
 <style scoped>

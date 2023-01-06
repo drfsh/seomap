@@ -1,5 +1,6 @@
 <template>
-    <div class="content__card">
+    <PanelLayout>
+        <div class="content__card">
         <div class="content__card__head">
             <h2 class="content__card__head__title">ویرایش اطلاعات</h2>
         </div>
@@ -10,18 +11,6 @@
                     <div class="content__card__body">
                         <form action="#">
                             <div class="row gy-4">
-                                <div class="col-md-6 col-lg-4">
-                                    <label class="form-label">نوع کاربر</label>
-
-                                    <div class="radios-1">
-                                        <div role="button" class="item" :class="{active:type===1}" @click="type=1">
-                                            حقیقی
-                                        </div>
-                                        <div role="button" class="item" :class="{active:type===2}" @click="type=2">
-                                            حقوقی
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label">نام {{ nameTitle }} </label>
                                     <div class="input-group">
@@ -92,31 +81,11 @@
             </div>
         </div>
     </div>
+    </PanelLayout>
 </template>
 
-<script>
-export default {
-    name: "Profile",
-    data() {
-        return {
-            type: 1
-        }
-    },
-    computed: {
-        nameTitle() {
-            if (this.type === 1)
-                return 'کاربر'
-            else
-                return 'شرکت'
-        },
-        nameExample() {
-            if (this.type === 1)
-                return 'مهدی درفشیده'
-            else
-                return 'سئومپ'
-        },
-    }
-}
+<script setup>
+import PanelLayout from "@/Layouts/PanelLayout.vue";
 </script>
 
 <style scoped>

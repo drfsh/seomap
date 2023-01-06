@@ -5,26 +5,26 @@
         </a>
         <ul class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="index.html">
+                <Link href="/">
                     <img src="/images/icons/home-2.svg" alt="home" />
                     <span> پنل کاربری</span>
-                </a>
+                </Link>
             </li>
             <li class="breadcrumb-item active" aria-current="page">داشبورد</li>
         </ul>
         <div class="content__header__actions">
-            <router-link :to="{name:'tickets'}">
+            <Link :to="{name:'tickets'}">
                 <img src="/images/icons/messages.svg" alt="tickets" />
                 <span>4</span>
-            </router-link>
+            </Link>
 
-            <router-link :to="{name:'notifications'}">
+            <Link :to="{name:'notifications'}">
                 <img
                     src="/images/icons/notification-bing.svg"
                     alt="notifications"
                 />
                 <span>1</span>
-            </router-link>
+            </Link>
             <a href="#">
                 <img src="/images/icons/exit.svg" alt="exit"/>
             </a>
@@ -34,10 +34,8 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: "headerPages"
-}
+<script setup>
+import {Link} from '@inertiajs/inertia-vue3';
 </script>
 
 <style scoped>

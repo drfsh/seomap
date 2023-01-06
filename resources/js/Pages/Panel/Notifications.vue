@@ -1,5 +1,6 @@
 <template>
-    <div class="content__card">
+    <PanelLayout>
+        <div class="content__card">
         <div class="content__card__head">
             <h2 class="content__card__head__title">اعلان ها</h2>
         </div>
@@ -174,12 +175,11 @@
             <!-- Pagination - END -->
         </div>
     </div>
+    </PanelLayout>
 </template>
 
-<script>
-export default {
-    name: "Notifications"
-}
+<script setup>
+import PanelLayout from "@/Layouts/PanelLayout.vue";
 </script>
 
 <style scoped>

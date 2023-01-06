@@ -1,5 +1,6 @@
 <template>
-    <div class="content__card">
+    <PanelLayout>
+        <div class="content__card">
         <div class="content__card__head">
             <h2 class="content__card__head__title">پشتیبانی</h2>
             <a href="tickets-new.html" class="btn btn--outline-primary">
@@ -192,12 +193,11 @@
             </div>
         </div>
     </div>
+    </PanelLayout>
 </template>
 
-<script>
-export default {
-    name: "Tickets"
-}
+<script setup>
+import PanelLayout from "@/Layouts/PanelLayout.vue";
 </script>
 
 <style scoped>

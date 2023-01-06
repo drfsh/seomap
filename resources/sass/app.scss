@@ -1,5 +1,4 @@
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
 
 // Variables
 @import 'variables';
@@ -49,4 +48,7 @@
 .radios-1 .item.active{
   background: #2f5bea;
   color: white;
+}
+.form-control,.form-control:hover{
+    background: transparent;
 }
