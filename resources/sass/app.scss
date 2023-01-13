@@ -5,11 +5,16 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+@import 'tom-select/dist/scss/tom-select.bootstrap5';
 
-@import 'panel.scss';
+@import 'login';
+@import 'panel';
 
 .rtl{
   direction: rtl;
+}
+.ltr{
+    direction: ltr;
 }
 .breadcrumb-item + .breadcrumb-item::before {
   float: right;
@@ -63,10 +68,54 @@ input[type=number] {
     width: 100%;
 }
 .btn-primary{
+    transition: 0.2s;
     width: 100%;
     border-radius: 8px;
     height: 45px;
     border: none;
     background: #2f5bea;
     color: white;
+}
+.btn-primary:hover{
+    background: rgb(82, 121, 246);
+}
+.btn-primary:disabled{
+    opacity: .5;
+}
+.loading {
+    margin: 0 auto;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin{
+    100%{
+        transform: rotate(360deg);
+    }
+}
+.input-group.disabled{
+    opacity: .5;
+    background: #e9ecef;
+}
+.widget:before {
+    opacity: 0;
+    content: "";
+    position: absolute;
+    width: 10%;
+    height: 100%;
+    left: 46%;
+    background: linear-gradient(150deg,transparent, white, white, white, transparent);
+    top: 0;
+    z-index: 0;
+    transition: 0.5s;
+}
+.widget:hover:before {
+    opacity: 1;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 100%;
 }

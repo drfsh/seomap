@@ -9,9 +9,11 @@
 </template>
 
 <script setup>
-
+import {onMounted,onUnmounted} from "vue";
+onMounted(()=>{
+    document.querySelector('html').className = 'auth-layout'
+})
+onUnmounted(()=>{
+    document.querySelector('html').className = ''
+})
 </script>
-
-<style>
-@import "@/../sass/_login.scss";
-</style>

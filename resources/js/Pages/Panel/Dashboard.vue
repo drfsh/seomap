@@ -1,42 +1,42 @@
 <template>
     <PanelLayout>
         <div class="content__card">
-            <div class="welcome-message">
+            <div v-if="!user.email" class="welcome-message">
                 <div class="welcome-message__text">
                     <img src="/images/icons/celebration.svg" alt="" />
-                    <span>کاربر جدید سایت </span>
+                    <span>{{user.name}}</span>
                     به پشتیبانی سایت خوش آمدید
                 </div>
                 <div class="welcome-message__notification">
                     <img src="/images/icons/Security-check-user.svg" alt="تایید هویت" />
                     لطفا هویت
-                    <span> <a href="profile.html"> حساب کاربری </a> </span>
+                    <span> <Link :href="route('profile.edit')"> حساب کاربری </Link> </span>
                     خود را تایید نمایید
                 </div>
             </div>
             <div class="row gy-4">
                 <div class="col-md-12 col-lg-4">
                     <div class="widget">
-                        <a href="orders-new-expo.html">
+                        <Link :href="route('service')">
                             <ic_list></ic_list>
                             ثبت سفارش
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="widget">
-                        <a href="favorite.html">
+                        <Link :href="route('orders.view')">
                             <ic_list_search></ic_list_search>
                             پیگیری سفارش
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="widget">
-                        <a href="orders-expo.html">
+                        <Link :href="route('ticket.list')">
                             <ic_chats></ic_chats>
                             پشتیبانی
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -56,39 +56,19 @@
                                     <tr>
                                         <th scope="col">شماره سفارش</th>
                                         <th scope="col">تاریخ ثبت</th>
-                                        <th scope="col">نام نمایشگاه </th>
+                                        <th scope="col">نوع خدمات</th>
                                         <th scope="col">مبلغ</th>
                                         <th scope="col">وضعیت</th>
                                         <th scope="col">جزییات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>#507285</td>
-                                        <td>1401/01/15</td>
-                                        <td>نمایشگاه  شماره یک</td>
-                                        <td>110,400 تومان</td>
-                                        <td class="text-yellow">پیش نویس</td>
-                                        <td>
-                                            <a href="orders-detail-expo.html">مشاهده</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>#817285</td>
-                                        <td>1401/02/06</td>
-                                        <td>نمایشگاه  شماره دو</td>
-                                        <td>110,400 تومان</td>
-                                        <td class="text-green">تکمیل شده</td>
-                                        <td>
-                                            <a href="orders-detail-expo.html">مشاهده</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>#619285</td>
-                                        <td>1401/03/27</td>
-                                        <td>نمایشگاه  شماره سه</td>
-                                        <td>110,400 تومان</td>
-                                        <td class="text-red">لغو شده</td>
+                                    <tr v-for="v in projects">
+                                        <td>#{{ v.code }}</td>
+                                        <td class="ltr">{{v.created_at}}</td>
+                                        <td>{{v.title}}</td>
+                                        <td>{{v.fee}} تومان</td>
+                                        <td class="text-yellow">{{v.status_fa}}</td>
                                         <td>
                                             <a href="orders-detail-expo.html">مشاهده</a>
                                         </td>
@@ -140,6 +120,15 @@ import Ic_list from "../../Components/svgs/ic_list.vue";
 import Ic_list_search from "../../Components/svgs/ic_list_search.vue";
 import Ic_chats from "../../Components/svgs/ic_chats.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
+import {usePage,Link} from "@inertiajs/inertia-vue3";
+
+const user = usePage().props.value.auth.user;
+
+const prop = defineProps({
+    projects: Object,
+});
+
+console.log(prop.projects)
 </script>
 
 <style scoped>

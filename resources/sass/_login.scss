@@ -1,7 +1,7 @@
-html,body{
+.auth-layout,.auth-layout body{
     height: 100%!important;
 }
-#app{
+.auth-layout #app{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,18 +16,27 @@ html,body{
     padding: 50px 88px;
     background: white;
     border-radius: 20px;
-    box-shadow: 0 1px 26px -14px #c9c9c9;
+    box-shadow: 0 1px 29px -10px #0000004d;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.input{
+.auth-layout .input{
     padding: 8px 15px;
     border-radius: 7px;
     border: none;
     width: 240px;
     background: #f0f0f0;
+}
+.auth-layout .input.error{
+    outline: 1px solid red;
+    background: #fff3f3;
+}
+.error-text{
+    text-align: center;
+    margin: 10px;
+    color: red;
 }
 .login-page .title {
     font-size: 16px;
@@ -39,8 +48,9 @@ html,body{
     margin-bottom: 32px;
     font-size: 14px;
     margin-top: 16px;
+    color: #a3a3a3;
 }
-.info-req {
+.auth-layout .info-req {
     margin-top: 20px;
     width: 328px;
     line-height: 1.8;
@@ -48,29 +58,71 @@ html,body{
     font-size: 14px;
     text-align: center;
 }
-.info-req a{
+.auth-layout .info-req a{
     color: black;
 }
-.number-edit .text svg {
+.auth-layout .number-edit .text svg {
     width: 15px;
     height: 15px
 }
 
-.number-edit .text {
+.auth-layout .number-edit .text {
     display: flex;
     align-items: center;
     color: #d9b856;
     cursor: pointer
 }
 
-.number-edit .number {
-    color: #094873
+.auth-layout .number-edit .number {
+    color: #094873;
+    font-size: 16px;
 }
 
-.number-edit {
+.auth-layout .number-edit {
     font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px
+    margin-bottom: 20px;
+    direction: rtl;
+}
+.auth-layout .input-code {
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
+}
+.auth-layout .input-code input.error {
+    color: #ff9090;
+    border-color: #ff9090;
+}
+.auth-layout .input-code input {
+    transition: 0.2s;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    text-align: center;
+    border-radius: 6px;
+    margin: 0 6px;
+    border: 2px solid #e0e0e0;
+}
+.auth-layout .input-code input:focus {
+    border: 2px solid #2f5bea;
+}
+.auth-layout .timer {
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+.auth-layout .resend-code {
+    margin-bottom: 21px;
+    font-size: 15px;
+    color: #2f5bea;
+    text-align: center;
+    font-weight: 700;
+}
+.auth-layout .resend-code span {
+    cursor: pointer
 }

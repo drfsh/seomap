@@ -1,6 +1,6 @@
 <template>
     <div class="content__header">
-        <a href="#" class="content__header__open-menu">
+        <a href="#" @click="showMenu" class="content__header__open-menu">
             <img src="/images/icons/menu.svg" alt="menu" />
         </a>
         <ul class="breadcrumb">
@@ -36,6 +36,9 @@
 
 <script setup>
 import {Link} from '@inertiajs/inertia-vue3';
+const showMenu = () => {
+  window.menuShow = true
+}
 </script>
 
 <style scoped>

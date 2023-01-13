@@ -20,19 +20,19 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'view'])->name('dashboard.view');
+    Route::get('/', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('/service', [OrderController::class, 'service'])->name('service');
+
+    Route::get('/service/{slug}', [OrderController::class, 'create'])->name('order.create');
+
     Route::get('/orders', [OrderController::class, 'view'])->name('orders.view');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/tickets', [TicketController::class, 'list'])->name('ticket.list');
     Route::get('/notifications', [NotificationController::class, 'list'])->name('notification.list');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

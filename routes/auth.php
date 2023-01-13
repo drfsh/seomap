@@ -22,6 +22,7 @@ Route::middleware('guest')->group(function () {
                 ->name('login');
 
     Route::post('login-send-code', [AuthenticatedSessionController::class, 'sendCode'])->name('smsLogin');
+    Route::post('login-auth-code', [AuthenticatedSessionController::class, 'authCode'])->name('smsLogin.auth');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
