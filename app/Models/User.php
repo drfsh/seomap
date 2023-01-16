@@ -3,16 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Morilog\Jalali\Jalalian;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
+    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -25,11 +27,22 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $appends = ['admin','code'];
+
     public function getProfileAttribute($value){
         if ($value)
             return $value;
         else
-            return '/images/icons/edit-user.svg';
+            return '/images/icons/user.svg';
+    }
+
+    public function getCodeAttribute()
+    {
+        return 5000 + $this->id;
+    }
+
+    public function getAdminAttribute(){
+        return $this->isPermission('admin');
     }
 
     public function projects(): HasMany
@@ -37,6 +50,16 @@ class User extends Authenticatable
         return $this->hasMany(Project::class);
     }
 
+    public function isPermission($value): bool
+    {
+        $p = Permission::where([['value',$value],['user_id',$this->id]])->first();
+        return !is_null($p);
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

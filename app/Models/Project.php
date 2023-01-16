@@ -11,12 +11,12 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $appends = ['code', 'status_fa'];
+    protected $appends = ['code', 'status_fa','paid'];
     protected $guarded = [];
 
     public function getCodeAttribute()
     {
-        return 50000 + $this->id;
+        return 3500 + $this->id;
     }
 
     public function getCreatedAtAttribute($value)
@@ -26,22 +26,45 @@ class Project extends Model
 
     public function getStatusFaAttribute()
     {
-        switch ($this->status) {
-            case 0:
-                return 'درحال برسی';
-            case 1:
-                return 'در انتضار پرداخت';
-            case 2:
-                return 'درحال انجام';
-            case 3:
-                return 'درانتضار پرداخت نهایی';
-            case 4:
-                return 'اتمام';
-            case 5:
-                return 'لغو';
-            default:
-                return '';
-        }
+        return match ($this->status) {
+            0 => 'درحال برسی',
+            1 => 'در انتضار پرداخت',
+            2 => 'درحال انجام',
+            3 => 'درانتضار پرداخت نهایی',
+            4 => 'اتمام',
+            5 => 'لغو',
+            default => '',
+        };
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function attr_new(){
+        return $this->hasOne(ProjectNewAttr::class);
+    }
+    public function attrs(){
+        return $this->hasMany(Attribute::class);
+    }
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
+    public function ticket(){
+        return $this->hasOne(Ticket::class);
+    }
+    public function plan(){
+        return $this->belongsTo(Plan::class);
+    }
+    public function service(){
+        return $this->belongsTo(Service::class);
+    }
+
+    public function getPaidAttribute(){
+        $invoices = Invoice::where([['project_id',$this->id],['status',1]])->get();
+        $p = 0;
+        foreach ($invoices as $invoice){
+            $p+=$invoice->amount;
+        }
+        return $p;
+    }
 }

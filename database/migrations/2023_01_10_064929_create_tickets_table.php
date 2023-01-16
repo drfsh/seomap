@@ -19,8 +19,10 @@ return new class extends Migration
             $table->integer('starter_id');
             $table->foreignId('project_id')->nullable()->constrained('projects')->cascadeOnDelete();
             $table->string('title');
+            $table->string('for');
             $table->integer('status')->default(0);
             //0=در انتظار پاسخ و 1=درحال برسی و 2=پاسخ داده شده و 3=بسته شده
+            $table->boolean('new')->default(0);
             $table->timestamps();
         });
     }

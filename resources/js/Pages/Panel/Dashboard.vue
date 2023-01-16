@@ -49,7 +49,7 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active"  id="all" role="tabpanel"  aria-labelledby="all-tab">
-                        <div class="table-container">
+                        <div v-if="projects.length>0" class="table-container">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -77,7 +77,13 @@
                                 </table>
                             </div>
                         </div>
-
+                        <div v-else class="text-center ">
+                            <div class="mb-3">هنوز سفارشی ندارید</div>
+                            <Link :href="route('service')" class="d-flex justify-content-center align-items-center">
+                                ثبت سفارش
+                                <img src="/images/icons/add-square.svg" class="me-1">
+                            </Link>
+                        </div>
                         <!-- Pagination - START -->
                         <div v-if="false" class="pagination">
                             <div class="page-item">

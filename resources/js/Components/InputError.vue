@@ -4,8 +4,14 @@ defineProps(['message']);
 
 <template>
     <div v-show="message">
-        <p class="text-sm text-red-600">
+        <span class="text-sm text-red-600" style="
+    background: #e46e6e;
+    border-radius: 11px;
+    padding: 2px 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;">
             {{ message }}
-        </p>
+        </span>
     </div>
 </template>

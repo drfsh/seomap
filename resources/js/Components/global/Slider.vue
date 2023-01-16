@@ -55,7 +55,8 @@
                 </li>
 
                 <li>
-                    <Link :class="{active:$page.component==='Panel/Notifications'}" :href="route('notification.list')">
+                    <Link :class="{active:(($page.component==='Panel/Notifications'||
+                    $page.component==='Panel/Notification'))}" :href="route('notification.list')">
                         <ic_bell></ic_bell>
                         اعلان ها
                     </Link>
@@ -64,7 +65,7 @@
 
             </ul>
 
-            <a href="#" class="sidebar__body__logout">خروج از حساب کاربری</a>
+            <Link :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری</Link>
         </div>
 
     </div>

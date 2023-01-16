@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Service;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -53,6 +54,10 @@ class OrderController extends Controller
     }
 
     private function newWeb($request){
-        dd($request->file('file'));
+        $validate = Validator::make($request->all(), [
+            'mobile' => 'required|regex:/(9)[0-9]/|size:10',
+        ]);
+        if ($validate->fails()) return $this->sendError(['step' => 0], $validate->errors()->messages());
+
     }
 }

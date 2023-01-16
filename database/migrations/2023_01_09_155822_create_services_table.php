@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('description',500);
             $table->boolean('enable')->default(true);
             $table->integer('form')->default(0);
+            $table->integer('sort')->default(0);
             $table->timestamps();
         });
     }

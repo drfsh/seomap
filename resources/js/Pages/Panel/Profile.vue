@@ -19,8 +19,8 @@
                                             <span class="input-group-text">
 											<img src="/images/icons/user.svg" alt="">
 										</span>
-                                            <InputError class="mt-2" :message="form.errors.name"/>
                                         </div>
+                                        <InputError class="mt-2" :message="form.errors.name"/>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <label class="form-label">شماره تلفن </label>
@@ -148,7 +148,7 @@ const submit = () => {
     });
 };
 
-const pathProfile = ref(user.profile)
+const pathProfile = ref(user.profile==='/images/icons/user.svg'?'/images/avatar-placeholder.png':user.profile)
 const selectImage = (event) => {
     if (event.target.files && event.target.files[0]) {
         const imageFile = event.target.files[0];
