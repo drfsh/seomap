@@ -185,7 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Kavenegar\Laravel\ServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -209,7 +209,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-         'Kavenegar' => Kavenegar\Laravel\Facade::class,
+
     ])->toArray(),
 
 ];

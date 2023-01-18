@@ -24,9 +24,8 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/test',function (){
-    session(['invoice_id'=>7]);
-});
+
+Route::get('/test',[DashboardController::class, 'test']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'view'])->name('dashboard');

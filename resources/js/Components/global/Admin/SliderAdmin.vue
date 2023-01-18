@@ -77,7 +77,7 @@
 
             </ul>
 
-            <Link style="margin-top: 25px;" :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری
+            <Link style="margin-top: 25px;"  method="post" :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری
             </Link>
         </div>
 

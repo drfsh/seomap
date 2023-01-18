@@ -10,9 +10,12 @@ use App\Models\Project;
 use App\Models\seen;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Traits\Smstrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Melipayamak;
+use Melipayamak\MelipayamakApi;
 
 class DashboardController extends Controller
 {
@@ -63,4 +66,10 @@ class DashboardController extends Controller
 
     }
 
+    use Smstrait;
+    public function test(){
+        $this->Sendsms("test","09164324749",119082);
+
+
+    }
 }

@@ -7,11 +7,14 @@ use App\Models\Attribute;
 use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
+use App\Traits\Smstrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Morilog\Jalali\Jalalian;
 
 class OrdersController extends Controller
 {
+    use Smstrait;
     public function view(Request $request){
         $code = (int)$request->code;
         if (!$code)
@@ -100,6 +103,36 @@ class OrdersController extends Controller
         $id = $request->id;
         $status = $request->status;
         $p = Project::find($id);
+        $user = $p->user;
+        if ($user){
+            if ($p->status==0){
+                if ($status==2)
+                {
+                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119091);
+                }
+                elseif ($status==1)
+                {
+                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119089);
+                }
+            }elseif ($p->status==2){
+                if ($status==1)
+                {
+                    $invoices = $p->invoices;
+                    if (sizeof($invoices)>0){
+                        $invoice = $invoices[sizeof($invoices)-1];
+                        $amount = number_format($invoice->amount);
+                        $this->Sendsms("$user->name;$p->code;$amount",$user->mobile,119095);
+                    }
+                }
+                elseif ($status==3){
+                    $this->Sendsms("$user->name;$p->code",$user->mobile,119093);
+                }
+            }elseif ($status==4){
+                $date = Jalalian::now()->format('Y/m/d');
+                $this->Sendsms("$user->name;$p->code;$date",$user->mobile,119092);
+            }
+        }
+
         $p->status = $status;
         $p->save();
         return $this->sendTrue($p,[]);

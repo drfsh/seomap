@@ -66,7 +66,7 @@ class AuthenticatedSessionController extends Controller
                 'code'=> $code
             ]);
         }
-//        $this->Sendsms($mobile,'authSeo',$code);
+        $this->Sendsms("$code",$mobile,119082);
         return $this->sendTrue(['step'=>2],['name' => 'کد ارسال شد']);
     }
 
@@ -82,7 +82,7 @@ class AuthenticatedSessionController extends Controller
         if (!$user)
             return $this->sendError(['step' => 0], '');
 
-        $entry = Entry::where('code',$code)->first();
+        $entry = Entry::where([['code',$code],['user_id',$user->id]])->first();
         if (!$entry)
             return $this->sendError(['step' => 2], ['code'=>'کد صحیح نمی باشد']);
 

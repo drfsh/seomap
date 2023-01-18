@@ -76,7 +76,7 @@
                                         <td>#{{ v.code }}</td>
                                         <td class="ltr">{{v.created_at}}</td>
                                         <td>{{v.service.name}}</td>
-                                        <td>{{v.fee}} تومان</td>
+                                        <td>{{separate(v.fee)}} تومان</td>
                                         <td :class="{'c-gold':v.status===0,'c-red':v.status===1||v.status===3||v.status===5,'c-green':v.status===2,'s-finish':v.status===4,}">{{v.status_fa}}</td>
                                         <td>
                                             <a href="orders-detail-expo.html">مشاهده</a>
@@ -110,6 +110,7 @@ import Ic_chats from "../../Components/svgs/ic_chats.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import {usePage,Link} from "@inertiajs/inertia-vue3";
 import Ic_tag from "@/Components/svgs/ic_tag.vue";
+import tools from "@/Utils/tools";
 
 const user = usePage().props.value.auth.user;
 
@@ -117,8 +118,7 @@ const prop = defineProps({
     projects: Object,
     pay: Boolean,
 });
+const separate = (price) => {
+    return tools.separate(price);
+}
 </script>
-
-<style scoped>
-
-</style>

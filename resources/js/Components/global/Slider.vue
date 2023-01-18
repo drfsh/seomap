@@ -65,7 +65,7 @@
 
             </ul>
 
-            <Link :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری</Link>
+            <Link method="post" :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری</Link>
         </div>
 
     </div>

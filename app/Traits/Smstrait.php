@@ -1,33 +1,33 @@
 <?php
 
 namespace App\Traits;
-use Kavenegar;
-// use Log;
-trait Smstrait {
-    public function Sendsms($phone, $template, $token,$token2=null,$token3=null,$token10=null,$token20=null) {
-        try{
-            $receptor = $phone;
-            $template =  $template;
-            $type =  "sms";
-            $token =  $token;
-            $token2 = $token2;
-            $token3 =  $token3;
-            $token10 =  $token10;
 
-            $result = Kavenegar::VerifyLookup($receptor,$token,$token2,$token3,$template,$type,$token10,$token20);
-        }
-        catch(ApiException $e){
+use Illuminate\Support\Facades\Config;
+use Melipayamak;
 
-        }
-        catch(HttpException $e){
+trait Smstrait
+{
+    public function Sendsms($text, $to, $bodyId)
+    {
 
-        }
+        $data = array(
+            'username' => Config::get('melipayamak.username'),
+            'password' => Config::get('melipayamak.password'),
+            'text' => $text,
+            'to' => $to,
+            "bodyId" => $bodyId);
 
-        // Log::info($phone.' - '.$token);
-    }
-    public function send($receptor,$message){
-        $sender = "0018018949161";		//This is the Sender number
+        $post_data = http_build_query($data);
+        $handle = curl_init('https://rest.payamak-panel.com/api/SendSMS/BaseServiceNumber');
+        curl_setopt($handle, CURLOPT_HTTPHEADER, array(
+            'content-type' => 'application/x-www-form-urlencoded'
+        ));
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($handle, CURLOPT_POST, true);
+        curl_setopt($handle, CURLOPT_POSTFIELDS, $post_data);
+        $response = curl_exec($handle);
 
-        return Kavenegar::Send($sender,$receptor,$message);
     }
 }
