@@ -11,12 +11,23 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $appends = ['code', 'status_fa','paid'];
+    protected $appends = ['code', 'status_fa','paid','error'];
     protected $guarded = [];
 
     public function getCodeAttribute()
     {
         return 3500 + $this->id;
+    }
+    public function getErrorAttribute()
+    {
+        $i = $this->invoices;
+        $c = false;
+        foreach ($i as $item)
+            if ($item->status!=1){
+                $c = true;
+                break;
+            }
+        return $c;
     }
 
     public function getCreatedAtAttribute($value)
@@ -46,8 +57,11 @@ class Project extends Model
     public function attrs(){
         return $this->hasMany(Attribute::class);
     }
+    public function access(){
+        return $this->hasOne(Access::class);
+    }
     public function invoices(){
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Invoice::class)->orderBy('created_at','desc');
     }
     public function ticket(){
         return $this->hasOne(Ticket::class);

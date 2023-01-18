@@ -1,20 +1,23 @@
 <template>
-    <AdminLayout>
+    <PanelLayout>
+        <Alert :message="session"></Alert>
         <div class="content__card">
             <div class="content__card__head">
                 <h2 class="content__card__head__title">
                     جزییات سفارش مشتری
                 </h2>
                 <div>
-                    <a target="_blank" :href="route('admin.user.edit',{id:project.user.id})"
-                       class="btn btn--outline-primary ms-2">
-                        کاربر
+
+                    <a v-if="dont_pay>0"
+                       :href="route('invoice.pay',{id:pay})"
+                       class="btn btn--primary ms-2">
+                         پرداخت صورت حساب جاری
                     </a>
-                    <a v-if="project.ticket" target="_blank" :href="route('admin.ticket.view',{code:project.ticket.code})"
+                    <a v-if="project.ticket" target="_blank" :href="route('ticket.view',{code:project.ticket.code})"
                        class="btn btn--outline-primary ms-2">
                         تیکت
                     </a>
-                    <a v-else target="_blank" :href="route('admin.ticket.create',{project:project.id})"
+                    <a v-else target="_blank" :href="route('ticket.create',{project:project.id})"
                        class="btn btn--outline-primary ms-2">
                         ایجاد تیکت
                     </a>
@@ -53,7 +56,7 @@
                         <img src="/images/icons/calendar.svg" alt="">
                         تاریخ سفارش:
                       </span>
-                                <strong>&nbsp;{{ project.created_at }}</strong>
+                                <strong class="ltr">&nbsp;{{ project.created_at }}&nbsp;&nbsp;</strong>
                             </div>
                         </div>
                     </div>
@@ -112,7 +115,7 @@
                             <div class="order-detail__item">
                                 <span>
                                     <img src="/images/icons/wallet-money2.svg" alt="">
-                                    <span v-if="project.status===0">مبلغ اولیه:</span>
+                                    <span v-if="project.status===0 && project.service.form!==3">مبلغ اولیه:</span>
                                     <span v-else>مبلغ نهایی:</span>
                                 </span>
                                 <strong v-if="project.fee!==0" class="text-green"> &nbsp; {{ separate(project.fee) }} تومان </strong>
@@ -130,7 +133,18 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="infos">
+                    <p v-if="dont_pay>0" style="color: red;">
+                        <ic_info class="me-2 ms-1" style="width: 17px;"></ic_info>
+                        شما <span style="font-weight: 600;margin: 0 4px;">{{dont_pay}}</span> صورتحساب پرداخت نشده دارید!
+                        .&nbsp;
+                        جهت پرداخت در بخش صورت حساب ها اقدام نمایید.
+                    </p>
+                    <p v-if="project.status===0 && project.service.form!==3">
+                        <ic_info class="me-2 ms-1" style="width: 17px;color: #727272;"></ic_info>
+                        زمان پیاده سازی و مبلغ نهایی پس از برسی اعلام میشود!
+                    </p>
+                </div>
                 <div class="nav nav-tabs mt-3" id="nav-tab" role="tablist">
                     <button class="nav-link position-relative" :class="{active:page===0}" @click="page=0">
                         <ic_document_text></ic_document_text>
@@ -139,43 +153,16 @@
                     <button class="nav-link position-relative" :class="{active:page===1}" @click="page=1">
                         <ic_list_2></ic_list_2>
                         مشخصات
+                        <span v-if="attrs.processing" class="count bg-blue" style="width: 10px;height: 10px;animation: pulse-primary 2s infinite;"></span>
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===2}" @click="page=2">
                         <ic_tag></ic_tag>
-                        پرداخت ها
-                        <span  v-if="dont_pay!==0" class="count">{{dont_pay}}</span>
-                    </button>
-                    <button class="nav-link position-relative" :class="{active:page===3}" @click="page=3">
-                        <ic_edit></ic_edit>
-                        کنترل ها
+                        صورتحساب ها
+                        <span  v-if="dont_pay!==0" class="count bg-blue" style="animation: pulse-primary 2s infinite;">{{dont_pay}}</span>
                     </button>
                 </div>
 
                 <div v-if="page===0">
-                    <div v-if="project.access">
-                        <div class="min-title">دسترسی ها</div>
-                        <div class="order-detail mt-3">
-                            <div style="height: 24px;">
-                                هاست :
-                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
-                                 username:   {{ project.access.host_username }}
-                            </span>
-                                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
-                                 password:   {{ project.access.host_password }}
-                            </span>
-                            </div>
-                        </div>    <div class="order-detail mt-3">
-                            <div style="height: 24px;">
-                                سایت :
-                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
-                                 username:   {{ project.access.web_username }}
-                            </span>
-                                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
-                                 password:   {{ project.access.web_password }}
-                            </span>
-                            </div>
-                        </div>
-                    </div>
                     <div v-if="project.file">
                         <div class="min-title">فایل پیوست</div>
                         <div class="order-detail mt-3">
@@ -183,8 +170,7 @@
                                 بازکردن فایل
                             </a>
                         </div>
-                    </div>
-                    <div>
+                    </div>  <div>
                         <div class="min-title">توضیحات مشتری</div>
                         <div class="order-detail mt-3">
                             <p class="order-info">
@@ -204,33 +190,34 @@
 
                 <div v-if="page===1">
                     <OrderAttrs :attrs="attrs" :project="project"></OrderAttrs>
+                    <div class="infos">
+                        <p v-if="project.status===0">
+                            <ic_info class="me-2 ms-1" style="width: 17px;color: #727272;"></ic_info>
+                            ویژگی ها , مشخصات پروژه و فعالیت ها در طول فرایند در این قسمت قرار خواهد گرفت.
+                        </p>
+                    </div>
                 </div>
 
                 <div v-if="page===2">
-                    <OrderInvoices :project="project" :invoices="project.invoices"></OrderInvoices>
+                    <OrderInvoices :invoices="project.invoices"></OrderInvoices>
                 </div>
-
-                <div v-if="page===3">
-                    <OrderSettings :project="project"></OrderSettings>
-                </div>
-
             </div>
         </div>
-    </AdminLayout>
+    </PanelLayout>
 </template>
 
 <script setup>
-import AdminLayout from "@/Layouts/AdminLayout.vue";
 import tools from "@/Utils/tools";
 
 import Ic_list_2 from "@/Components/svgs/ic_list_2.vue";
 import Ic_tag from "@/Components/svgs/ic_tag.vue";
 import {ref} from "vue";
 import Ic_document_text from "@/Components/svgs/ic_document_text.vue";
-import Ic_edit from "@/Components/svgs/ic_edit.vue";
-import OrderAttrs from "@/Pages/Admin/Order/OrderAttrs.vue";
-import OrderInvoices from "@/Pages/Admin/Order/OrderInvoices.vue";
-import OrderSettings from "@/Pages/Admin/Order/OrderSettings.vue";
+import OrderAttrs from "@/Pages/Panel/Order/OrderAttrs.vue";
+import OrderInvoices from "@/Pages/Panel/Order/OrderInvoices.vue";
+import PanelLayout from "@/Layouts/PanelLayout.vue";
+import Ic_info from "@/Components/svgs/ic_info.vue";
+import Alert from "@/Components/Alert.vue";
 
 const page = ref(0);
 const separate = (price) => {
@@ -239,7 +226,13 @@ const separate = (price) => {
 const prop = defineProps({
     project: Object,
     attrs: Object,
-    dont_pay:Number
+    pay:Number,
+    dont_pay:Number,
+    session:String,
+    invoice_id:Number
 })
+
+if (prop.invoice_id)
+    location.href = route('invoice.pay',{id:prop.invoice_id})
 
 </script>

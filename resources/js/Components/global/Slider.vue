@@ -35,15 +35,15 @@
 
                 <li>
                     <Link :class="{active:$page.component==='Panel/Service'}" :href="route('service')">
-
                         <ic_list></ic_list>
                         ثبت سفارش
                     </Link>
                 </li>
-                <li>
-                    <Link :class="{active:$page.component==='Panel/Orders'}" :href="route('orders.view')">
+                <li class="position-relative">
+                    <Link :class="{active:$page.component==='Panel/Orders'}" :href="route('orders.list')">
                         <ic_list_search></ic_list_search>
-                        پیگیریسفارش
+                        پیگیری سفارش
+                        <div class="count" style="animation: pulse-primary 2s infinite;" v-if="cAlert.projects"></div>
                     </Link>
                 </li>
 
@@ -79,7 +79,7 @@ import Ic_list_search from "../svgs/ic_list_search.vue";
 import Ic_bell from "../svgs/ic_bell.vue";
 import Ic_chats from "../svgs/ic_chats.vue";
 import {Link, usePage} from '@inertiajs/inertia-vue3';
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 const user = usePage().props.value.auth.user;
 const menuShow = ref(false)
 setInterval(()=>{
@@ -93,5 +93,10 @@ watch(menuShow,(v)=>{
         document.body.style.overflow = 'hidden'
     }else
         document.body.style.overflow = ''
+})
+const cAlert = ref({projects:false})
+onMounted(async () => {
+    let {data} = await axios.get(route('infoSlider'))
+    cAlert.value = data.data
 })
 </script>

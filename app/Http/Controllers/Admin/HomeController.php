@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function view(){
         return Inertia::render('Admin/Dashboard', [
-            'projects' => Project::latest()->take(2)->get(),
+            'projects' => Project::with('service')->latest()->take(2)->get(),
         ]);
     }
 }

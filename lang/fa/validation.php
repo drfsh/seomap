@@ -134,7 +134,7 @@ return [
         'array' => 'The :attribute must contain :size items.',
         'file' => 'The :attribute must be :size kilobytes.',
         'numeric' => 'The :attribute must be :size.',
-        'string' => ':attribute باید بیشتر از :size کاراکتر باشد.',
+        'string' => ':attribute باید  :size کاراکتر باشد.',
     ],
     'starts_with' => 'The :attribute must start with one of the following: :values.',
     'string' => 'The :attribute must be a string.',
@@ -175,7 +175,12 @@ return [
     */
 
     'attributes' => [
-        'text'=>'متن'
+        'text'=>'متن',
+        'name'=>'نام',
+        'type'=>'نوع',
+        'description'=>'توضیحات',
+        'platform'=>'پلتفرم',
+        'mobile'=>'شماره',
     ],
 
 ];

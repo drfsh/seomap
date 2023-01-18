@@ -7,7 +7,7 @@
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         @vite('resources/sass/app.scss')
-        @routes((auth()->user()->isPermission('admin'))?'admin':(auth()->check()?'user':'guest'))
+        @routes((auth()->check()&&auth()->user()->isPermission('admin'))?'admin':(auth()->check()?'user':'guest'))
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
     </head>

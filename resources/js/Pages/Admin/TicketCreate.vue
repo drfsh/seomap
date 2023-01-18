@@ -1,5 +1,5 @@
 <template>
-    <PanelLayout>
+    <AdminLayout>
         <div class="content__card">
             <div class="content__card__head">
                 <h2 class="content__card__head__title">ارسال تیکت جدید</h2>
@@ -50,15 +50,16 @@
                 </form>
             </div>
         </div>
-    </PanelLayout>
+
+    </AdminLayout>
 </template>
 
 <script setup>
 import {Link, useForm} from '@inertiajs/inertia-vue3'
-import PanelLayout from "@/Layouts/PanelLayout.vue";
 import {ref} from "vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import InputError from "@/Components/InputError.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 const dep = ref([
     'طراحی و توسعه',
     'تیم فنی',
@@ -77,7 +78,7 @@ const form = useForm({
 });
 const textFile = ref(null)
 const submit = () => {
-    form.post(route('ticket.store'), {
+    form.post(route('admin.ticket.store'), {
         forceFormData:true,
     });
 };

@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function projects(): HasMany
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class)->orderBy('created_at','desc')->with('service');
     }
 
     public function isPermission($value): bool

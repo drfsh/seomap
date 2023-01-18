@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="widget">
-                        <Link :href="route('orders.view')">
+                        <Link :href="route('admin.services')">
                             <ic_list_search></ic_list_search>
                             سرویس ها
                         </Link>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="widget">
-                        <Link :href="route('ticket.list')">
+                        <Link :href="route('admin.orders')">
                             <ic_chats></ic_chats>
                             پیگیری سفارشات
                         </Link>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="widget">
-                        <Link :href="route('ticket.list')">
+                        <Link :href="route('admin.tickets')">
                             <ic_chats></ic_chats>
                             پشتیبانی
                         </Link>
@@ -39,7 +39,7 @@
         <div class="content__card">
             <div class="content__card__head">
                 <h2 class="content__card__head__title"> جدیدترین سفارشات</h2>
-                <Link :href="route('admin.users')" class="btn btn--outline-primary">
+                <Link :href="route('admin.orders')" class="btn btn--outline-primary">
                     مشاهده همه
                 </Link>
             </div>
@@ -64,11 +64,11 @@
                                     <tr v-for="v in projects">
                                         <td>#{{ v.code }}</td>
                                         <td class="ltr">{{ v.created_at }}</td>
-                                        <td>{{ v.title }}</td>
+                                        <td>{{v.service.name}}</td>
                                         <td>{{ v.fee }} تومان</td>
                                         <td class="text-yellow">{{ v.status_fa }}</td>
                                         <td>
-                                            <a href="orders-detail-expo.html">مشاهده</a>
+                                            <Link :href="route('admin.order',{code:v.code})">مشاهده</Link>
                                         </td>
                                     </tr>
                                     </tbody>

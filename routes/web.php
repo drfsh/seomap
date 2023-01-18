@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\UserController;
@@ -23,23 +24,33 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test',function (){
+    session(['invoice_id'=>7]);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('/api/countAlert', [DashboardController::class, 'countAlert'])->name('countAlert');
+    Route::get('/api/infoSlider', [DashboardController::class, 'infoSlider'])->name('infoSlider');
 
     Route::get('/service', [OrderController::class, 'service'])->name('service');
 
     Route::get('/service/{slug}', [OrderController::class, 'create'])->name('order.create');
 
-    Route::get('/orders', [OrderController::class, 'view'])->name('orders.view');
+    Route::get('/orders', [OrderController::class, 'list'])->name('orders.list');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/order/{code}', [OrderController::class,'project'])->name('order');
+
+    Route::get('/invoice/pay/{id}', [\App\Http\Controllers\Panel\InvoiceController::class,'pay'])->name('invoice.pay');
+    Route::any('/invoice/callback', [\App\Http\Controllers\Panel\InvoiceController::class,'callback'])->name('invoice.callback');
+
 
     Route::get('/tickets', [TicketController::class, 'list'])->name('ticket.list');
     Route::get('/ticket/create', [TicketController::class, 'create'])->name('ticket.create');
     Route::post('/ticket/create', [TicketController::class, 'store'])->name('ticket.store');
     Route::get('/ticket/{code}', [TicketController::class, 'view'])->name('ticket.view');
     Route::post('/ticket', [TicketController::class, 'reply'])->name('ticket.reply');
+    Route::post('/admin/ticket/status', [\App\Http\Controllers\Admin\TicketController::class, 'status'])->name('admin.ticket.status');
 
     Route::get('/notifications', [NotificationController::class, 'list'])->name('notification.list');
     Route::get('/notification/{id}', [NotificationController::class,'view'])->name('notification');
@@ -66,7 +77,15 @@ Route::middleware('auth.admin')->group(function () {
 
     Route::get('/admin/orders', [OrdersController::class,'view'])->name('admin.orders');
     Route::get('/admin/order/{code}', [OrdersController::class,'project'])->name('admin.order');
-    // coming...
+    Route::post('/admin/order/attr/{id}', [OrdersController::class,'attrUpdate'])->name('admin.order.attr.edit');
+    Route::delete('/admin/order/attr/{id}', [OrdersController::class,'attrDelete'])->name('admin.order.attr.delete');
+    Route::post('/admin/order/attr', [OrdersController::class,'attrStore'])->name('admin.order.attr.store');
+    Route::post('/admin/order/status', [OrdersController::class,'status'])->name('admin.order.status');
+    Route::post('/admin/order/update', [OrdersController::class,'update'])->name('admin.order.update');
+
+    Route::post('/admin/invoice', [InvoiceController::class,'store'])->name('admin.invoice.store');
+
+
 
     Route::get('/admin/tickets', [\App\Http\Controllers\Admin\TicketController::class,'list'])->name('admin.tickets');
     Route::get('/admin/ticket/create', [\App\Http\Controllers\Admin\TicketController::class, 'create'])->name('admin.ticket.create');
@@ -81,6 +100,7 @@ Route::middleware('auth.admin')->group(function () {
     Route::get('/admin/notification/{id}', [\App\Http\Controllers\Admin\NotificationController::class,'notification'])->name('admin.notification');
     Route::get('/admin/notification/edit/{id}', [\App\Http\Controllers\Admin\NotificationController::class,'edit'])->name('admin.notification.edit');
     Route::post('/admin/notification/edit/{id}', [\App\Http\Controllers\Admin\NotificationController::class,'update'])->name('admin.notification.update');
+    Route::delete('/admin/notification/{id}', [\App\Http\Controllers\Admin\NotificationController::class,'delete'])->name('admin.notification.delete');
 
 });
 require __DIR__.'/auth.php';

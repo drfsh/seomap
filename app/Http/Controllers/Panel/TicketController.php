@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketStoreRequest;
 use App\Models\Message;
+use App\Models\Project;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,7 +13,10 @@ use Inertia\Inertia;
 class TicketController extends Controller
 {
     public function list(){
-        $tickets = Ticket::where('user_id',auth()->id())->paginate(5);
+        Ticket::where('user_id',auth()->id())->update([
+            'new'=>false
+        ]);
+        $tickets = Ticket::where('user_id',auth()->id())->orderBy('created_at','desc')->paginate(5);
         $tComing = Ticket::where([['user_id',auth()->id()],['status',0]])->count();
         $tProcess = Ticket::where([['user_id',auth()->id()],['status',1]])->count();
         $tOk = Ticket::where([['user_id',auth()->id()],['status',2]])->count();
@@ -36,8 +40,11 @@ class TicketController extends Controller
         ]);
     }
 
-    public function create(){
-        return Inertia::render('Panel/TicketCreate');
+    public function create(Request $request){
+        $project = Project::find($request->project);
+        return Inertia::render('Panel/TicketCreate',[
+            'project'=>$project
+        ]);
     }
 
     public function store(TicketStoreRequest $request){
@@ -48,6 +55,8 @@ class TicketController extends Controller
         $ticket->dep = $request->dep;
         $ticket->user_id = $user_id;
         $ticket->starter_id = $user_id;
+        $ticket->project_id = $request->project_id;
+
         $ticket->save();
 
         $message = new Message();
@@ -60,7 +69,7 @@ class TicketController extends Controller
         }
         $message->save();
 
-        return redirect(route(''));
+        return redirect(route('ticket.view',['code'=>$ticket->code]));
     }
 
     public function reply(Request $request){
@@ -84,5 +93,13 @@ class TicketController extends Controller
         $message->save();
 
         return redirect(route('ticket.view',['code'=>$ticket->code]));
+    }
+
+    public function status(Request $request){
+        $ticket = Ticket::where([['id'=>$request->id],['user_id',auth()->id()]]);
+        if (!$ticket) abort(500);
+        $ticket->status = $request->status;
+        $ticket->save();
+        return redirect(route('admin.ticket.view',['code'=>$ticket->code]));
     }
 }

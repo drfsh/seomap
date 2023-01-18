@@ -2,10 +2,16 @@
     <PanelLayout>
         <div class="content__card">
             <div class="content__card__head">
-                <h2 class="content__card__head__title">تیکت شماره {{ticket.code}}</h2>
-                <a href="#" class="btn btn--outline-primary">
-                    بستن تیکت
-                </a>
+                <h2 class="content__card__head__title"> تیکت شماره {{ticket.code}}
+                    <span v-if="ticket.status===3" style="font-size: 70%;margin-right: 4px;color: #ff0f0f;">بسته شده</span></h2>
+                <div>
+                    <a v-if="ticket.project_id" target="_blank" :href="route('order',{code:ticket.project_id+3500})" class="btn btn--outline-primary ms-2">
+                        پروژه
+                    </a>
+                    <Link v-if="ticket.status!==3" method="post" :href="route('admin.ticket.status')" :data="{id:ticket.id,status:3}" class="btn btn--outline-primary">
+                        بستن تیکت
+                    </Link>
+                </div>
             </div>
             <div class="content__card__body">
                 <div class="ticket__messages">
@@ -54,7 +60,7 @@
 
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import TicketMessage from "@/Components/Ticket/TicketMessage.vue";
-import {useForm} from "@inertiajs/inertia-vue3";
+import {useForm,Link} from "@inertiajs/inertia-vue3";
 import {ref} from "vue";
 import InputError from "@/Components/InputError.vue";
 

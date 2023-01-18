@@ -52,6 +52,14 @@ class NotificationController extends Controller
         ]);
     }
 
+    public function delete($id){
+        $not = Notification::find($id);
+        if (!$not) abort(404);
+        $not->delete();
+        return redirect()->intended(route('admin.notifications'));
+
+    }
+
     public function update($id,Request $request){
         $title = $request->title;
         $icon = $request->icon;

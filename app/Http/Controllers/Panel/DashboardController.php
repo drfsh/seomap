@@ -3,21 +3,35 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Project;
 use App\Models\seen;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function view(): \Inertia\Response
+    public function view()
     {
+        $id = auth()->id();
+        $project = Project::with('service')->where('user_id',$id)->get();
+        $c = false;
+        foreach ($project as $value){
+            $i = $value->invoices;
+            foreach ($i as $item)
+                if ($item->status!=1){
+                    $c = $value;
+                    break;
+                }
+        }
         return Inertia::render('Panel/Dashboard', [
             'projects' => auth()->user()->projects,
+            'pay' => $c,
         ]);
     }
 
@@ -31,6 +45,22 @@ class DashboardController extends Controller
         }
         $tickets = Ticket::where([['user_id',auth()->id()],['new',1]])->count();
         return $this->sendTrue(['notification'=>$c,'ticket'=>$tickets],[]);
+    }
+
+    public function infoSlider(){
+        $id = auth()->id();
+        $project = Project::where('user_id',$id)->get();
+        $c = false;
+        foreach ($project as $value){
+            $i = $value->invoices;
+            foreach ($i as $item)
+                if ($item->status!=1){
+                    $c = true;
+                    break;
+                }
+        }
+        return $this->sendTrue(['projects'=>$c],[]);
+
     }
 
 }

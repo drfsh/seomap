@@ -7,6 +7,9 @@
                     {{notification.title}}
                 </h2>
                 <div>
+                    <Link method="delete" :href="route('admin.notification.delete',{id:notification.id})" class="btn btn--outline-primary ms-2">
+                        حذف
+                    </Link>
                     <Link :href="route('admin.notification.edit',{id:notification.id})" class="btn btn--outline-primary ms-2">
                         ویرایش
                     </Link>

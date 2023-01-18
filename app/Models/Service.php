@@ -26,6 +26,10 @@ class Service extends Model
     {
         return $this->hasMany(Platform::class);
     }
+    public function plans(): HasMany
+    {
+        return $this->hasMany(Plan::class);
+    }
 
     public function sPlatforms(): array
     {

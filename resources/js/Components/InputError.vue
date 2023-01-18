@@ -3,7 +3,7 @@ defineProps(['message']);
 </script>
 
 <template>
-    <div v-show="message">
+    <div v-show="message" class="pt-2">
         <span class="text-sm text-red-600" style="
     background: #e46e6e;
     border-radius: 11px;

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->string('name');
             $table->string('mobile',20);
+            $table->string('example')->nullable();
             $table->foreignId('type_id')->nullable()->constrained('types')->nullOnDelete();
             $table->foreignId('platform_id')->nullable()->constrained('platforms')->nullOnDelete();
             $table->timestamps();

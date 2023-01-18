@@ -14,6 +14,15 @@
                     خود را تایید نمایید
                 </div>
             </div>
+            <div v-if="pay" class="welcome-message" style="background: #ffdede;">
+                <div class="welcome-message__text">
+                    <ic_tag></ic_tag>
+                    صورت حساب پرداخت نشده ای دارید!
+                </div>
+                <div class="welcome-message__notification">
+                    <span> <Link :href="route('order',{code:pay.code})"> مشاهده و پرداخت </Link> </span>
+                </div>
+            </div>
             <div class="row gy-4">
                 <div class="col-md-12 col-lg-4">
                     <div class="widget">
@@ -25,7 +34,7 @@
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="widget">
-                        <Link :href="route('orders.view')">
+                        <Link :href="route('orders.list')">
                             <ic_list_search></ic_list_search>
                             پیگیری سفارش
                         </Link>
@@ -66,9 +75,9 @@
                                     <tr v-for="v in projects">
                                         <td>#{{ v.code }}</td>
                                         <td class="ltr">{{v.created_at}}</td>
-                                        <td>{{v.title}}</td>
+                                        <td>{{v.service.name}}</td>
                                         <td>{{v.fee}} تومان</td>
-                                        <td class="text-yellow">{{v.status_fa}}</td>
+                                        <td :class="{'c-gold':v.status===0,'c-red':v.status===1||v.status===3||v.status===5,'c-green':v.status===2,'s-finish':v.status===4,}">{{v.status_fa}}</td>
                                         <td>
                                             <a href="orders-detail-expo.html">مشاهده</a>
                                         </td>
@@ -84,33 +93,6 @@
                                 <img src="/images/icons/add-square.svg" class="me-1">
                             </Link>
                         </div>
-                        <!-- Pagination - START -->
-                        <div v-if="false" class="pagination">
-                            <div class="page-item">
-                                <a href="#" class="page-link previous">
-                                    <img src="/images/icons/chevron.svg" alt="" />
-                                </a>
-                            </div>
-                            <div class="page-item">
-                                <a href="#" class="page-link">1</a>
-                            </div>
-                            <div class="page-item">
-                                <a href="#" class="page-link">2</a>
-                            </div>
-                            <div class="page-item active">
-                                <a href="#" class="page-link">3</a>
-                            </div>
-                            <span>...</span>
-                            <div class="page-item">
-                                <a href="#" class="page-link">4</a>
-                            </div>
-                            <div class="page-item">
-                                <a href="#" class="page-link next">
-                                    <img src="/images/icons/chevron.svg" alt="" />
-                                </a>
-                            </div>
-                        </div>
-                        <!-- Pagination - END -->
                     </div>
                     <div class="tab-pane fade" id="completed"  role="tabpanel"  aria-labelledby="completed-tab" > تکمیل شده </div>
                     <div class="tab-pane fade" id="canceled"   role="tabpanel"  aria-labelledby="canceled-tab" > لغو شده </div>
@@ -127,14 +109,14 @@ import Ic_list_search from "../../Components/svgs/ic_list_search.vue";
 import Ic_chats from "../../Components/svgs/ic_chats.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import {usePage,Link} from "@inertiajs/inertia-vue3";
+import Ic_tag from "@/Components/svgs/ic_tag.vue";
 
 const user = usePage().props.value.auth.user;
 
 const prop = defineProps({
     projects: Object,
+    pay: Boolean,
 });
-
-console.log(prop.projects)
 </script>
 
 <style scoped>

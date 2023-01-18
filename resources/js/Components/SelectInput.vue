@@ -2,7 +2,7 @@
 import {onMounted, ref} from 'vue';
 import TomSelect from "tom-select";
 
-defineProps(['modelValue', 'options']);
+defineProps(['modelValue', 'options','n']);
 
 defineEmits(['update:modelValue']);
 
@@ -30,7 +30,7 @@ defineExpose({focus: () => input.value.focus()});
 <template>
     <select ref="input" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
             id="content-tun-select" class="form-select">
-        <option value="">انتخاب کنید</option>
+        <option v-if="!n" value="">انتخاب کنید</option>
         <option :value="i" v-for="(v,i) in options">{{ v }}</option>
     </select>
 </template>

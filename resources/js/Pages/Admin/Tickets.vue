@@ -3,7 +3,7 @@
     <div class="content__card">
         <div class="content__card__head">
             <h2 class="content__card__head__title">پشتیبانی</h2>
-            <Link :href="route('ticket.create')" class="btn btn--outline-primary">
+            <Link :href="route('admin.ticket.create')" class="btn btn--outline-primary">
                 ارسال تیکت جدید
             </Link>
         </div>
@@ -79,6 +79,7 @@
 </template>
 
 <script setup>
+import {Link} from '@inertiajs/inertia-vue3'
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Paginate from "@/Components/Paginate.vue";
 import TicketItem from "@/Components/Ticket/TicketItem.vue";

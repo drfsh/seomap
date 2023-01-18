@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->string('url');
-            $table->string('web_username');
-            $table->string('web_password');
-            $table->string('host_username');
-            $table->string('host_password');
+            $table->string('web_username')->nullable();
+            $table->string('web_password')->nullable();
+            $table->string('host_username')->nullable();
+            $table->string('host_password')->nullable();
             $table->timestamps();
         });
     }

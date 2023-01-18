@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('pay_num')->nullable();
+            $table->string('pay')->nullable();
+            $table->string('authority')->nullable();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->integer('amount');
             $table->string('info');
+            $table->string('data')->default(1);
             $table->integer('status')->default(0);
             //0=در انتضار پرداخت و 1=پرداخت شده و 2=خطا یا پرداخت نشده.
             $table->timestamp('pay_date')->nullable();
