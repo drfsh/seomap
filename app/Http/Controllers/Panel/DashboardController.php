@@ -64,6 +64,7 @@ class DashboardController extends Controller
 
     use Smstrait;
     public function test(){
-        dd(Carbon::now()->format('h:i'));
+        return $this->sendTrue(Notification::latest()->first(),[]);
+        dd(Notification::latest()->first());
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,12 +26,14 @@ class Invoice extends Model
     }
     public function getCreatedAtAttribute($value)
     {
+        $value = Carbon::parse($value)->timezone('Asia/Tehran');
         return Verta($value)->format('Y/m/d H:i');
     }
     public function getPayDateAttribute($value)
     {
         if ($value)
         {
+            $value = Carbon::parse($value)->timezone('Asia/Tehran');
             return Verta($value)->format('Y/m/d H:i');
         }
         else return null;

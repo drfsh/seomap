@@ -58,6 +58,7 @@ class User extends Authenticatable
 
     public function getCreatedAtAttribute($value)
     {
+        $value = Carbon::parse($value)->timezone('Asia/Tehran');
         return Verta($value)->format('Y/m/d');
     }
     /**
