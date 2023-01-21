@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Morilog\Jalali\Jalalian;
 
 class Message extends Model
 {
@@ -15,7 +13,7 @@ class Message extends Model
 
     public function getUpdatedAtAttribute($value)
     {
-        $date = Jalalian::fromCarbon(Carbon::parse($value));
+        $date = Verta($value);
         return [$date->format('Y/m/d '), $date->format('H:i')];
     }
 

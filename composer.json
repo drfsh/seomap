@@ -9,6 +9,7 @@
         "evryn/laravel-toman": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "hekmatinasser/notowo": "^1.0",
+        "hekmatinasser/verta": "^8.1",
         "inertiajs/inertia-laravel": "^0.6.3",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.8",

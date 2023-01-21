@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Morilog\Jalali\Jalalian;
 
 class Invoice extends Model
 {
@@ -27,12 +25,14 @@ class Invoice extends Model
     }
     public function getCreatedAtAttribute($value)
     {
-        return Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d H:i');
+        return Verta($value)->format('Y/m/d H:i');
     }
     public function getPayDateAttribute($value)
     {
         if ($value)
-        return Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d H:i');
+        {
+            return Verta($value)->format('Y/m/d H:i');
+        }
         else return null;
     }
     public function project(){

@@ -11,11 +11,13 @@ use App\Models\seen;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Traits\Smstrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Melipayamak;
 use Melipayamak\MelipayamakApi;
+use Morilog\Jalali\Jalalian;
 
 class DashboardController extends Controller
 {
@@ -68,8 +70,6 @@ class DashboardController extends Controller
 
     use Smstrait;
     public function test(){
-        $this->Sendsms("test","09164324749",119082);
-
-
+        dd(Jalalian::fromCarbon(Carbon::now())->format('H:i'));
     }
 }

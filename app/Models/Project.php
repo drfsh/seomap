@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Morilog\Jalali\Jalalian;
 
 class Project extends Model
 {
@@ -32,16 +30,16 @@ class Project extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        return Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d H:i');
+        return Verta($value)->format('H:i Y/m/d');
     }
 
     public function getStatusFaAttribute()
     {
         return match ($this->status) {
             0 => 'درحال برسی',
-            1 => 'در انتضار پرداخت',
+            1 => 'در انتظار پرداخت',
             2 => 'درحال انجام',
-            3 => 'درانتضار پرداخت نهایی',
+            3 => 'در انتظار پرداخت نهایی',
             4 => 'اتمام',
             5 => 'لغو',
             default => '',

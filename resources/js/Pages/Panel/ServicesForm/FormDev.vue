@@ -8,13 +8,15 @@
             <form action="#">
                 <div class="row gy-4">
                     <div class="col-lg-6">
-                        <label class="form-label">یک دسته بندی برای پروژه خود انتخاب کنید</label>
-                        <SelectInput :n="true" :options="services" v-model="form.service"></SelectInput>
+                        <label class="form-label">نوع خدمات</label>
+                        <div class="input-group" style="padding: 14px;">
+                            <span>{{services[form.service]}}</span>
+                        </div>
                     </div>
                     <div class="col-lg-6">
-                        <label class="form-label">عنوان خدمات</label>
+                        <label class="form-label">نام سایت</label>
                         <div class="input-group">
-                            <input type="text" v-model="form.title" class="form-control" placeholder="عنوان خدمات مد نظر خود را وارد نمایید">
+                            <input type="text" v-model="form.title" class="form-control" placeholder="نام سایت خود را وارد نمایید">
                         </div>
                     </div>
 

@@ -41,7 +41,7 @@ class Ticket extends Model
 
     public function getUpdatedAtAttribute($value)
     {
-        $date = Jalalian::fromCarbon(Carbon::parse($value));
+        $date = Verta($value);
         return [$date->format('Y/m/d '), $date->format('H:i')];
     }
 }

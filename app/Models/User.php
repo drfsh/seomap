@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function getCreatedAtAttribute($value)
     {
-        return Jalalian::fromCarbon(Carbon::parse($value))->format('Y/m/d');
+        return Verta($value)->format('Y/m/d');
     }
     /**
      * The attributes that should be hidden for serialization.

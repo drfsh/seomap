@@ -4,7 +4,7 @@
             <div class="row gy-4">
                 <div class="col-md-6 col-lg-3">
                     <div class="widget">
-                        <Link :href="route('admin')">
+                        <Link :href="route('admin.users')">
                             <ic_list></ic_list>
                             کاربران
                         </Link>
