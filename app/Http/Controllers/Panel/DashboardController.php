@@ -3,21 +3,15 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice;
-use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Project;
 use App\Models\seen;
 use App\Models\Ticket;
-use App\Models\User;
 use App\Traits\Smstrait;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Melipayamak;
 use Melipayamak\MelipayamakApi;
-use Morilog\Jalali\Jalalian;
 
 class DashboardController extends Controller
 {
@@ -70,6 +64,6 @@ class DashboardController extends Controller
 
     use Smstrait;
     public function test(){
-        dd(Jalalian::fromCarbon(Carbon::now())->format('H:i'));
+        dd(Carbon::now()->format('h:i'));
     }
 }
