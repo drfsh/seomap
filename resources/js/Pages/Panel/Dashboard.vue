@@ -76,10 +76,11 @@
                                         <td>#{{ v.code }}</td>
                                         <td class="ltr">{{v.created_at}}</td>
                                         <td>{{v.service.name}}</td>
-                                        <td>{{separate(v.fee)}} تومان</td>
+                                        <td v-if="v.status!==0">{{separate(v.fee)}} تومان</td>
+                                        <td v-else class="c-gold">درحال برسی</td>
                                         <td :class="{'c-gold':v.status===0,'c-red':v.status===1||v.status===3||v.status===5,'c-green':v.status===2,'s-finish':v.status===4,}">{{v.status_fa}}</td>
                                         <td>
-                                            <a href="orders-detail-expo.html">مشاهده</a>
+                                            <Link :href="route('order',{code:v.code})">مشاهده</Link>
                                         </td>
                                     </tr>
                                     </tbody>

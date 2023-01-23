@@ -24,10 +24,12 @@
             <div class="content__card__body tabby">
 
                 <div class="plan-" :class="{'h':project.plan.id===2,'v':project.plan.id===3,'e':project.plan.id===4}">
-                    {{ project.plan.name }}
+                    <div class="icons" v-if="project.plan.id===1">
+                        <img v-for="v in project.attr_new.platform.icons" :src="'/images/icons/platform/'+v+'.svg'"/>
+                    </div>
                 </div>
 
-                <div class="order-detail">
+                <div class="order-detail" style="position: relative;z-index: 2;">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="order-detail__item ">
@@ -138,7 +140,7 @@
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===1}" @click="page=1">
                         <ic_list_2></ic_list_2>
-                        مشخصات
+                        مراحل روند پروژه
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===2}" @click="page=2">
                         <ic_tag></ic_tag>
@@ -152,54 +154,7 @@
                 </div>
 
                 <div v-if="page===0">
-                    <div v-if="project.access">
-                        <div class="min-title">دسترسی ها</div>
-                        <div class="order-detail mt-3">
-                            <div style="height: 24px;">
-                                هاست :
-                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
-                                 username:   {{ project.access.host_username }}
-                            </span>
-                                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
-                                 password:   {{ project.access.host_password }}
-                            </span>
-                            </div>
-                        </div>    <div class="order-detail mt-3">
-                            <div style="height: 24px;">
-                                سایت :
-                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
-                                 username:   {{ project.access.web_username }}
-                            </span>
-                                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
-                                 password:   {{ project.access.web_password }}
-                            </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="project.file">
-                        <div class="min-title">فایل پیوست</div>
-                        <div class="order-detail mt-3">
-                            <a target="_blank" :href="project.file" class="order-info">
-                                بازکردن فایل
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="min-title">توضیحات مشتری</div>
-                        <div class="order-detail mt-3">
-                            <p class="order-info">
-                                {{ project.description }}
-                            </p>
-                        </div>
-                    </div>
-                    <div v-if="project.attr_new && project.attr_new.example">
-                        <div class="min-title" v-if="project.service_id==1">نمونه سایت</div>
-                        <div class="order-detail mt-3">
-                            <p class="order-info ltr">
-                                {{ project.attr_new.example }}
-                            </p>
-                        </div>
-                    </div>
+                    <OrderDescription :attrs="attrs" :project="project"></OrderDescription>
                 </div>
 
                 <div v-if="page===1">
@@ -231,6 +186,7 @@ import Ic_edit from "@/Components/svgs/ic_edit.vue";
 import OrderAttrs from "@/Pages/Admin/Order/OrderAttrs.vue";
 import OrderInvoices from "@/Pages/Admin/Order/OrderInvoices.vue";
 import OrderSettings from "@/Pages/Admin/Order/OrderSettings.vue";
+import OrderDescription from "@/Pages/Admin/Order/OrderDescription.vue";
 
 const page = ref(0);
 const separate = (price) => {

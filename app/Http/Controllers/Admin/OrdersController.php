@@ -55,6 +55,8 @@ class OrdersController extends Controller
         foreach ($attrsOne as $attr){
                 $attrs[$attr->type][] = $attr;
         }
+
+
         return Inertia::render('Admin/Order',[
             'project'=>$project,
             'attrs'=>$attrs,

@@ -84,9 +84,10 @@
                             <div class="order-detail__item">
                                   <span>
                                     <img src="/images/icons/timer.svg" alt="">
-                                    مدت زمان پیاده سازی:
+                                    مدت زمان پیاده سازی
                                   </span>
-                                <strong> &nbsp; {{ project.days }} روز کاری</strong>
+                                <strong v-if="project.status!==0"> &nbsp; {{ project.days }} روز کاری</strong>
+                                <strong v-else class="c-gold"> &nbsp; درحال برسی </strong>
                             </div>
                         </div>
                         <div class="col-lg-4" v-if="project.service.form===3 && project.access">
@@ -118,8 +119,8 @@
                                     <span v-if="project.status===0 && project.service.form!==3">مبلغ اولیه:</span>
                                     <span v-else>مبلغ نهایی:</span>
                                 </span>
-                                <strong v-if="project.fee!==0" class="text-green"> &nbsp; {{ separate(project.fee) }} تومان </strong>
-                                <strong v-else class="text-green"> &nbsp; درحال برسی </strong>
+                                <strong v-if="project.fee!==0 && project.status!==0" class="text-green"> &nbsp; {{ separate(project.fee) }} تومان </strong>
+                                <strong v-else class="c-gold"> &nbsp; درحال برسی </strong>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -128,7 +129,8 @@
                                     <img src="/images/icons/wallet-money-primary.svg" alt="">
                                     مبلغ پرداخت شده:
                                 </span>
-                                <strong class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
+                                <strong v-if="project.paid!==0" class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
+                                <strong v-else> &nbsp; بدون پرداخت</strong>
                             </div>
                         </div>
                     </div>
@@ -152,8 +154,7 @@
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===1}" @click="page=1">
                         <ic_list_2></ic_list_2>
-                        مشخصات
-                        <span v-if="attrs.processing" class="count bg-blue" style="width: 10px;height: 10px;animation: pulse-primary 2s infinite;"></span>
+                        مراحل روند پروژه
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===2}" @click="page=2">
                         <ic_tag></ic_tag>
@@ -163,29 +164,7 @@
                 </div>
 
                 <div v-if="page===0">
-                    <div v-if="project.file">
-                        <div class="min-title">فایل پیوست</div>
-                        <div class="order-detail mt-3">
-                            <a target="_blank" :href="project.file" class="order-info">
-                                بازکردن فایل
-                            </a>
-                        </div>
-                    </div>  <div>
-                        <div class="min-title">توضیحات مشتری</div>
-                        <div class="order-detail mt-3">
-                            <p class="order-info">
-                                {{ project.description }}
-                            </p>
-                        </div>
-                    </div>
-                    <div v-if="project.attr_new && project.attr_new.example">
-                        <div class="min-title" v-if="project.service_id==1">نمونه سایت</div>
-                        <div class="order-detail mt-3">
-                            <p class="order-info ltr">
-                                {{ project.attr_new.example }}
-                            </p>
-                        </div>
-                    </div>
+                    <OrderDescription :attrs="attrs" :project="project"></OrderDescription>
                 </div>
 
                 <div v-if="page===1">
@@ -218,6 +197,7 @@ import OrderInvoices from "@/Pages/Panel/Order/OrderInvoices.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import Ic_info from "@/Components/svgs/ic_info.vue";
 import Alert from "@/Components/Alert.vue";
+import OrderDescription from "@/Pages/Panel/Order/OrderDescription.vue";
 
 const page = ref(0);
 const separate = (price) => {

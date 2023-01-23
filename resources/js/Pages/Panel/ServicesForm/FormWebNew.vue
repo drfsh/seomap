@@ -158,8 +158,6 @@ const form = useForm({
     file: null
 })
 const submit = () => {
-    console.log(attrs.value)
-    return
     form.lang = lags.value[langS.value];
     form.attrs = attrs.value;
     form.post(route('orders.store'), {
@@ -267,7 +265,7 @@ const changeAttrs = (event, i) => {
 }
 let oldType = form.type
 watch(form, (value) => {
-    if (value!==oldType){
+    if (value.type!==oldType){
         oldType = form.type
         setupList()
     }

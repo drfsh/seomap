@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->string('name');
+            $table->string('icons',500);
             $table->integer('fee')->default(0);
             $table->string('description',500)->nullable();
             $table->timestamps();

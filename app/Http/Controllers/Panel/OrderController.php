@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Access;
+use App\Models\Attribute;
 use App\Models\Invoice;
 use App\Models\Plan;
 use App\Models\Project;
@@ -117,8 +118,10 @@ class OrderController extends Controller
             'platform' => 'required',
             'service' => 'required',
             'plan' => 'required',
+            'attrs' => 'required',
             'description' => 'required|min:10|max:4000',
         ]);
+
 
         $project = new Project();
         $project->user_id = auth()->id();
@@ -141,6 +144,22 @@ class OrderController extends Controller
         $attrNew->platform_id = $request->platform;
         $attrNew->save();
 
+        foreach($request->attrs as $attr){
+            Attribute::create([
+                'project_id'=>$project->id,
+                'description'=>$attr,
+                'name'=>'-',
+                'value'=>'-',
+                'type'=>'attr',
+            ]);
+        }
+        Attribute::create([
+            'project_id'=>$project->id,
+            'description'=>$request->lang,
+            'name'=>'زبان ها',
+            'value'=>'-',
+            'type'=>'lang',
+        ]);
         $invoice = Invoice::create([
             'info'=>'پیش پرداخت اولیه',
             'amount'=>2000000,//2,000,000 toman

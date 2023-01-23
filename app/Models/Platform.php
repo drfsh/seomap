@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Platform extends Model
 {
     use HasFactory;
+
+    public function getIconsAttribute($v){
+        return json_decode($v);
+    }
 }

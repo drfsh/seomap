@@ -65,7 +65,7 @@
                                         <td>#{{ v.code }}</td>
                                         <td class="ltr">{{ v.created_at }}</td>
                                         <td>{{v.service.name}}</td>
-                                        <td>{{ v.fee }} تومان</td>
+                                        <td>{{ separate(v.fee) }} تومان</td>
                                         <td class="text-yellow">{{ v.status_fa }}</td>
                                         <td>
                                             <Link :href="route('admin.order',{code:v.code})">مشاهده</Link>
@@ -101,12 +101,16 @@ import Ic_list_search from "../../Components/svgs/ic_list_search.vue";
 import Ic_chats from "../../Components/svgs/ic_chats.vue";
 import {usePage, Link} from "@inertiajs/inertia-vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import tools from "@/Utils/tools";
 
 const user = usePage().props.value.auth.user;
 
 const prop = defineProps({
     projects: Object,
 });
+const separate = (price) => {
+    return tools.separate(price);
+}
 </script>
 
 <style scoped>
