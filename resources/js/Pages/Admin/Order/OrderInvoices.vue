@@ -14,12 +14,20 @@
 
             <div class="col-md-6 col-lg-4">
                 <div class="input-group">
-                    <input type="number" v-model="form.amount" class="form-control"
+                    <input type="number" :max="project.fee-project.paid" v-model="form.amount" class="form-control"
                            placeholder="مبلغ (تومان)">
                     <span class="input-group-text">
                     </span>
                 </div>
-                <div v-if="form.amount" class="text-start c-green" style="font-size: 13px;margin: 6px;font-weight: 600;">{{separate(form.amount)}} تومان</div>
+                <div  class="text-start c-green"
+                     style="font-size: 13px;margin: 6px;font-weight: 600;">
+                    <span class="float-end c-red">
+                    قابل پرداخت : {{ separate(pMax) }} تومان
+                    </span>
+                <span v-if="form.amount">
+                    {{ separate(form.amount) }} تومان
+                </span>
+                </div>
                 <InputError class="mt-2" :message="form.errors.amount"/>
             </div>
             <div class="col-md-2 text-center align-self-start">
@@ -48,11 +56,13 @@
                 <tbody>
                 <tr v-for="v in invoices">
                     <td>#{{ v.code }}</td>
-                    <td>{{ separate(v.amount) }} تومان </td>
-                    <td style="font-weight: 600" :class="{'c-green':v.status===1,'c-red':v.status===2,'c-gold':v.status===0}">{{ v.status_fa }}</td>
+                    <td>{{ separate(v.amount) }} تومان</td>
+                    <td style="font-weight: 600"
+                        :class="{'c-green':v.status===1,'c-red':v.status===2,'c-gold':v.status===0}">{{ v.status_fa }}
+                    </td>
                     <td>{{ v.info }}</td>
                     <td class="ltr">{{ v.created_at }}</td>
-                    <td class="ltr" >{{ v.pay_date?v.pay_date:'----' }}</td>
+                    <td class="ltr">{{ v.pay_date ? v.pay_date : '----' }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -68,8 +78,10 @@ import tools from "@/Utils/tools.js";
 import {useForm} from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
 import Loading from "@/Components/Loading.vue";
+import {watch} from "vue";
 
-const prop = defineProps(['invoices','project'])
+const prop = defineProps(['invoices', 'project'])
+const pMax = prop.project.fee-prop.project.paid
 const separate = (price) => {
     return tools.separate(price);
 }
@@ -77,7 +89,7 @@ const separate = (price) => {
 const form = useForm({
     info: null,
     amount: null,
-    project:prop.project.id
+    project: prop.project.id
 });
 
 const submit = () => {
@@ -91,4 +103,10 @@ const status = [
     'اتمام',
     'لغو'
 ]
+
+watch(form,(v)=>{
+    if (v.amount>=pMax){
+        form.amount = pMax
+    }
+})
 </script>
