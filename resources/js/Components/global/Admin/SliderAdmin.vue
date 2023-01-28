@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar" :class="{close:!menuShow}">
         <div class="sidebar__head">
-            <a href="#" @click="menuShow=!menuShow" class="sidebar__head__close-menu">
+            <a @click="menuShow=!menuShow" class="sidebar__head__close-menu">
                 <img src="/images/icons/close.svg" alt=""/>
             </a>
             <div class="sidebar__head__logo">
@@ -61,7 +61,8 @@
                 </li>
 
                 <li>
-                    <Link :class="{active:($page.component==='Admin/Tickets'||$page.component==='Admin/Ticket')}" :href="route('admin.tickets')">
+                    <Link :class="{active:($page.component==='Admin/Tickets'||$page.component==='Admin/Ticket')}"
+                          :href="route('admin.tickets')">
                         <ic_chats></ic_chats>
                         پشتیبانی
                     </Link>
@@ -77,7 +78,8 @@
 
             </ul>
 
-            <Link style="margin-top: 25px;"  method="post" :href="route('logout')" class="sidebar__body__logout">خروج از حساب کاربری
+            <Link style="margin: auto;margin-top: 25px;" method="POST" as="button"  :href="route('logout')" class="sidebar__body__logout border-0 bg-transparent">خروج از
+                حساب کاربری
             </Link>
         </div>
 
@@ -92,21 +94,28 @@ import Ic_list_search from "../../svgs/ic_list_search.vue";
 import Ic_bell from "../../svgs/ic_bell.vue";
 import Ic_chats from "../../svgs/ic_chats.vue";
 import {Link, usePage} from '@inertiajs/inertia-vue3';
-import {ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import Ic_user_edit from "@/Components/svgs/ic_user_edit.vue";
 
 const user = usePage().props.value.auth.user;
 const menuShow = ref(false)
-setInterval(() => {
-    if (window.menuShow) {
-        menuShow.value = true
-        window.menuShow = false
-    }
-}, 0)
+let timer = null
+onMounted(() => {
+    timer = setInterval(() => {
+        if (window.menuShow) {
+            menuShow.value = true
+            window.menuShow = false
+        }
+    }, 0)
+})
+onUnmounted(() => {
+    clearInterval(timer)
+    document.body.classList.remove('onSlide')
+})
 watch(menuShow, (v) => {
     if (v == true) {
-        document.body.style.overflow = 'hidden'
+        document.body.classList.add('onSlide')
     } else
-        document.body.style.overflow = ''
+        document.body.classList.remove('onSlide')
 })
 </script>

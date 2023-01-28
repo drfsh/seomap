@@ -23,15 +23,15 @@
                             </thead>
                             <tbody>
                             <tr v-for="user in users.data">
-                                <td style="min-width: 0;">#{{ user.code }}</td>
-                                <td>{{ user.created_at }}</td>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.mobile }}</td>
-                                <td>{{ user.email ? user.email : '---' }}</td>
-                                <td class="text-yellow">
+                                <td data-label="ID" style="min-width: 0;">#{{ user.code }}</td>
+                                <td data-label="تاریخ عضویت">{{ user.created_at }}</td>
+                                <td data-label="نام و نام خانوادگی">{{ user.name }}</td>
+                                <td data-label="شماره تلفن">{{ user.mobile }}</td>
+                                <td data-label="ایمیل">{{ user.email ? user.email : '---' }}</td>
+                                <td data-label="اصلاح" class="text-yellow">
                                     <Link :href="route('admin.user.edit',{id:user.id})">ویرایش</Link>
                                 </td>
-                                <td>
+                                <td data-label="اعمال">
                                     <a role="button"  @click="destroy(user.id)">حذف</a>
                                 </td>
                             </tr>

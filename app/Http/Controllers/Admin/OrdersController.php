@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use App\Traits\Smstrait;
+use Hekmatinasser\Jalali\Traits\Validation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Morilog\Jalali\Jalalian;
@@ -105,35 +106,57 @@ class OrdersController extends Controller
         $id = $request->id;
         $status = $request->status;
         $p = Project::find($id);
-        $user = $p->user;
-        if ($user){
-            if ($p->status==0){
-                if ($status==2)
+//        $user = $p->user;
+//        if ($user){
+//            if ($p->status==0){
+//                if ($status==2)
+//                {
+//                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119091);
+//                }
+//                elseif ($status==1)
+//                {
+//                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119089);
+//                }
+//            }elseif ($p->status==2){
+//                if ($status==1)
+//                {
+//                    $invoices = $p->invoices;
+//                    if (sizeof($invoices)>0){
+//                        $invoice = $invoices[sizeof($invoices)-1];
+//                        $amount = number_format($invoice->amount);
+//                        $this->Sendsms("$user->name;$p->code;$amount",$user->mobile,119095);
+//                    }
+//                }
+//                elseif ($status==3){
+//                    $this->Sendsms("$user->name;$p->code",$user->mobile,119093);
+//                }
+//            }elseif ($status==4){
+//                $date = Jalalian::now()->format('Y/m/d');
+//                $this->Sendsms("$user->name;$p->code;$date",$user->mobile,119092);
+//            }
+//        }
+
+        if ($status==2){
+            $haInfo = false;
+            foreach ($p->attrs as $attr){
+                if ($attr->type=='startDate')
                 {
-                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119091);
+                    $haInfo = $attr;
+                    break;
                 }
-                elseif ($status==1)
-                {
-                    $this->Sendsms("$user->name;$p->code;",$user->mobile,119089);
-                }
-            }elseif ($p->status==2){
-                if ($status==1)
-                {
-                    $invoices = $p->invoices;
-                    if (sizeof($invoices)>0){
-                        $invoice = $invoices[sizeof($invoices)-1];
-                        $amount = number_format($invoice->amount);
-                        $this->Sendsms("$user->name;$p->code;$amount",$user->mobile,119095);
-                    }
-                }
-                elseif ($status==3){
-                    $this->Sendsms("$user->name;$p->code",$user->mobile,119093);
-                }
-            }elseif ($status==4){
-                $date = Jalalian::now()->format('Y/m/d');
-                $this->Sendsms("$user->name;$p->code;$date",$user->mobile,119092);
+            }
+            if (!$haInfo) {
+                Attribute::create([
+                    'name'=>'start',
+                    'value'=>'start',//process
+                    'description'=>'start',
+                    'type'=>'startDate',
+                    'project_id'=>$p->id,
+                ]);
             }
         }
+
+
 
         $p->status = $status;
         $p->save();
@@ -150,6 +173,79 @@ class OrdersController extends Controller
         $p->title = $title;
         $p->fee = $fee;
         $p->save();
+
+        return redirect(route('admin.order',['code'=>$p->code]));
+    }
+
+    public function createStartAttrs(Request $request){
+        $request->validate([
+            'info' => ['required'],
+        ]);
+        $p = Project::find($request->project_id);
+        $haInfo = false;
+        foreach ($p->attrs as $attr){
+            if ($attr->type=='startInfo')
+            {
+                $haInfo = $attr;
+                break;
+            }
+        }
+        if (!$haInfo) {
+            Attribute::create([
+                'name' => 'info',
+                'project_id' => $request->project_id,
+                'description' => $request->info,
+                'value' => false,
+                'type' => 'startInfo'
+            ]);
+        }
+        else{
+            $haInfo->description = $request->info;
+            $haInfo->save();
+        }
+
+        $attrs = $request->attrs;
+        foreach ($attrs as $attr){
+            Attribute::create([
+                'name'=>$attr['text'],
+                'project_id'=> $request->project_id,
+                'description'=>null,
+                'value'=>null,
+                'type'=>'startAttrs'
+            ]);
+        }
+        return redirect(route('admin.order',['code'=>$p->code]));
+    }
+
+    public function createDemoAttrs(Request $request){
+        $request->validate([
+            'info' => ['required'],
+            'type' => ['required'],
+            'url' => ['required'],
+        ]);
+        $p = Project::find($request->project_id);
+        $type = $request->type;
+        $haInfo = false;
+        foreach ($p->attrs as $attr){
+            if ($attr->type==$type)
+            {
+                $haInfo = $attr;
+                break;
+            }
+        }
+        if (!$haInfo) {
+            Attribute::create([
+                'project_id' => $request->project_id,
+                'description' => $request->info,
+                'value' => $request->url,
+                'type' => $type
+            ]);
+        }
+        else{
+            $haInfo->description = $request->info;
+            $haInfo->value = $request->url;
+            $haInfo->save();
+        }
 
         return redirect(route('admin.order',['code'=>$p->code]));
     }

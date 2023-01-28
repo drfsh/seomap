@@ -181,6 +181,7 @@ return [
         'description'=>'توضیحات',
         'platform'=>'پلتفرم',
         'mobile'=>'شماره',
+        'info'=>'توضیحات'
     ],
 
 ];

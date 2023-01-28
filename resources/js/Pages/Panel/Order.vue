@@ -27,10 +27,11 @@
             <div class="content__card__body tabby">
 
                 <div class="plan-" :class="{'h':project.plan.id===2,'v':project.plan.id===3,'e':project.plan.id===4}">
-                    {{ project.plan.name }}
+                    <div class="icons" v-if="project.service.id===1">
+                        <img v-for="v in project.attr_new.platform.icons" :src="'/images/icons/platform/'+v+'.svg'"/>
+                    </div>
                 </div>
-
-                <div class="order-detail">
+                <div style="position: relative;z-index: 2" class="order-detail">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="order-detail__item ">
@@ -142,10 +143,15 @@
                         .&nbsp;
                         جهت پرداخت در بخش صورت حساب ها اقدام نمایید.
                     </p>
+                    <p v-if="runningError" style="color: red;">
+                        <ic_info class="me-2 ms-1" style="width: 17px;"></ic_info>
+                        {{runningError}}
+                    </p>
                     <p v-if="project.status===0 && project.service.form!==3">
                         <ic_info class="me-2 ms-1" style="width: 17px;color: #727272;"></ic_info>
                         زمان پیاده سازی و مبلغ نهایی پس از برسی اعلام میشود!
                     </p>
+
                 </div>
                 <div class="nav nav-tabs mt-3" id="nav-tab" role="tablist">
                     <button class="nav-link position-relative" :class="{active:page===0}" @click="page=0">
@@ -155,11 +161,16 @@
                     <button class="nav-link position-relative" :class="{active:page===1}" @click="page=1">
                         <ic_list_2></ic_list_2>
                         مراحل روند پروژه
+                        <span  v-if="files!==0" class="count bg-blue" style="animation: pulse-primary 2s infinite;">{{files}}</span>
                     </button>
                     <button class="nav-link position-relative" :class="{active:page===2}" @click="page=2">
                         <ic_tag></ic_tag>
                         صورتحساب ها
                         <span  v-if="dont_pay!==0" class="count bg-blue" style="animation: pulse-primary 2s infinite;">{{dont_pay}}</span>
+                    </button>
+                    <button v-if="attrs.startDate" class="nav-link position-relative" :class="{active:page===3}" @click="page=3">
+                        <ic_timer></ic_timer>
+                        مدت زمان
                     </button>
                 </div>
 
@@ -180,6 +191,10 @@
                 <div v-if="page===2">
                     <OrderInvoices :invoices="project.invoices"></OrderInvoices>
                 </div>
+
+                <div ref="elTime" v-show="page===3">
+                    <OrderTime v-if="attrs.startDate" :project="project" :attrs="attrs"></OrderTime>
+                </div>
             </div>
         </div>
     </PanelLayout>
@@ -190,7 +205,7 @@ import tools from "@/Utils/tools";
 
 import Ic_list_2 from "@/Components/svgs/ic_list_2.vue";
 import Ic_tag from "@/Components/svgs/ic_tag.vue";
-import {ref} from "vue";
+import {onUnmounted, ref} from "vue";
 import Ic_document_text from "@/Components/svgs/ic_document_text.vue";
 import OrderAttrs from "@/Pages/Panel/Order/OrderAttrs.vue";
 import OrderInvoices from "@/Pages/Panel/Order/OrderInvoices.vue";
@@ -198,8 +213,11 @@ import PanelLayout from "@/Layouts/PanelLayout.vue";
 import Ic_info from "@/Components/svgs/ic_info.vue";
 import Alert from "@/Components/Alert.vue";
 import OrderDescription from "@/Pages/Panel/Order/OrderDescription.vue";
+import OrderTime from "@/Pages/Panel/Order/OrderTime.vue";
+import Ic_timer from "@/Components/svgs/ic_timer.vue";
 
 const page = ref(0);
+const runningError = ref(null);
 const separate = (price) => {
     return tools.separate(price);
 }
@@ -215,4 +233,37 @@ const prop = defineProps({
 if (prop.invoice_id)
     location.href = route('invoice.pay',{id:prop.invoice_id})
 
+const files = ref(0)
+
+
+const fun = ()=>{
+    files.value = 0
+    if (prop.attrs.startAttrs){
+        const data = prop.attrs.startAttrs
+        for (const i in data) {
+            if (data[i].value==null && data[i].description==null)
+                files.value++
+        }
+    }
+    runningError.value = null
+    if (prop.attrs.finish && prop.attrs.finish[0].name==null && prop.attrs.finish[0].description==null){
+        runningError.value = "پروژه به پایان رسید از بخش \"مراحل روند پروژه\" بررسی و تایید کنید."
+    }
+    if (prop.attrs.demoTest && prop.attrs.demoTest[0].name==null && prop.attrs.demoTest[0].description==null){
+        runningError.value = "لطفا از بخش \"مراحل روند پروژه > مرحله تست\" , دمو را مشاهده و تایید کنید."
+    }
+
+    if (prop.attrs.demoCheck && prop.attrs.demoCheck[0].name==null && prop.attrs.demoCheck[0].description==null){
+        runningError.value = "لطفا از بخش \"مراحل روند پروژه > مرحله برسی\" , دمو را مشاهده و تایید کنید."
+    }
+
+    if (files.value>0){
+        runningError.value = files.value+" عدد از اطلاعات خواسته شده را ارسال نکرده اید. از تب \"مراحل روند پروژه\" اطلاعات را ارسال کنید."
+    }
+}
+fun()
+const timer = setInterval(fun,1000)
+onUnmounted(()=>{
+    clearInterval(timer)
+})
 </script>

@@ -272,4 +272,39 @@ class OrderController extends Controller
         ]);
     }
 
+    public function uploadAttrs(Request $request){
+
+        $id = $request->attr_id;
+        $info = $request->info;
+
+        $attr = Attribute::find($id);
+        if (!$attr || $attr->project->user_id!=auth()->id())
+            return abort(404);
+
+
+        if ($request->hasFile('file')){
+            $path = $this->upload($request->file('file'));
+            $attr->value = $path;
+        }
+        $attr->description = $info;
+        $attr->save();
+
+        return redirect(route('order',['code'=>$attr->project->code]));
+    }
+
+    public function demoChecked(Request $request){
+
+        $id = $request->attr_id;
+        $info = $request->info;
+
+        $attr = Attribute::find($id);
+        if (!$attr || $attr->project->user_id!=auth()->id())
+            return abort(404);
+
+        $attr->name = $info;
+        $attr->save();
+
+        return redirect(route('order',['code'=>$attr->project->code]));
+    }
+
 }

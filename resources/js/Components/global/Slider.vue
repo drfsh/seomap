@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar" :class="{close:!menuShow}">
         <div class="sidebar__head">
-            <a href="#" @click="menuShow=!menuShow" class="sidebar__head__close-menu">
+            <a @click="menuShow=!menuShow" class="sidebar__head__close-menu">
                 <img src="/images/icons/close.svg" alt=""/>
             </a>
             <div class="sidebar__head__logo">
@@ -79,24 +79,31 @@ import Ic_list_search from "../svgs/ic_list_search.vue";
 import Ic_bell from "../svgs/ic_bell.vue";
 import Ic_chats from "../svgs/ic_chats.vue";
 import {Link, usePage} from '@inertiajs/inertia-vue3';
-import {onMounted, ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 const user = usePage().props.value.auth.user;
 const menuShow = ref(false)
-setInterval(()=>{
-    if (window.menuShow){
-        menuShow.value = true
-        window.menuShow = false
-    }
-},0)
-watch(menuShow,(v)=>{
-    if (v==true){
-        document.body.style.overflow = 'hidden'
-    }else
-        document.body.style.overflow = ''
+
+watch(menuShow, (v) => {
+    if (v == true) {
+        document.body.classList.add('onSlide')
+    } else
+        document.body.classList.remove('onSlide')
 })
 const cAlert = ref({projects:false})
+let timer = null
 onMounted(async () => {
     let {data} = await axios.get(route('infoSlider'))
     cAlert.value = data.data
+    timer = setInterval(() => {
+        if (window.menuShow) {
+            menuShow.value = true
+            window.menuShow = false
+        }
+    }, 0)
+})
+onUnmounted(()=>{
+    document.body.classList.remove('onSlide')
+    clearInterval(timer)
+
 })
 </script>

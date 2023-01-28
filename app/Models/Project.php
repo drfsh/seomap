@@ -10,19 +10,20 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $appends = ['code', 'status_fa','paid','error'];
+    protected $appends = ['code', 'status_fa', 'paid', 'error'];
     protected $guarded = [];
 
     public function getCodeAttribute()
     {
         return 3500 + $this->id;
     }
+
     public function getErrorAttribute()
     {
         $i = $this->invoices;
         $c = false;
         foreach ($i as $item)
-            if ($item->status!=1){
+            if ($item->status != 1) {
                 $c = true;
                 break;
             }
@@ -44,40 +45,57 @@ class Project extends Model
             3 => 'در انتظار پرداخت نهایی',
             4 => 'اتمام',
             5 => 'لغو',
+            6 => 'درانتظار دریافت اطلاعات',
             default => '',
         };
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function attr_new(){
+
+    public function attr_new()
+    {
         return $this->hasOne(ProjectNewAttr::class);
     }
-    public function attrs(){
+
+    public function attrs()
+    {
         return $this->hasMany(Attribute::class);
     }
-    public function access(){
+
+    public function access()
+    {
         return $this->hasOne(Access::class);
     }
-    public function invoices(){
-        return $this->hasMany(Invoice::class)->orderBy('created_at','desc');
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class)->orderBy('created_at', 'desc');
     }
-    public function ticket(){
+
+    public function ticket()
+    {
         return $this->hasOne(Ticket::class);
     }
-    public function plan(){
+
+    public function plan()
+    {
         return $this->belongsTo(Plan::class);
     }
-    public function service(){
+
+    public function service()
+    {
         return $this->belongsTo(Service::class);
     }
 
-    public function getPaidAttribute(){
-        $invoices = Invoice::where([['project_id',$this->id],['status',1]])->get();
+    public function getPaidAttribute()
+    {
+        $invoices = Invoice::where([['project_id', $this->id], ['status', 1]])->get();
         $p = 0;
-        foreach ($invoices as $invoice){
-            $p+=$invoice->amount;
+        foreach ($invoices as $invoice) {
+            $p += $invoice->amount;
         }
         return $p;
     }

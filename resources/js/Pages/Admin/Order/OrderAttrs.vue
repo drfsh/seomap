@@ -2,88 +2,67 @@
 
     <div>
         <div class="min-title mb-3">وضعیت</div>
-        <div class="d-flex">
-            <div>
+        <div class="statuses">
+            <div class="titles">
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item" style="white-space: nowrap" role="button">
+                    <div class="item" @click="page=0" :class="{active:page===0}" style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
                         مرحله :
                     </span>
                             <strong class="me-2">شروع</strong>
-                            <ic_tick_green :class="{'opacity-0':!attrs.start}" class=" me-2"></ic_tick_green>
+                            <ic_tick_green v-if="sentAllAttrs && attrs.startAttrs" class="icon"></ic_tick_green>
+                            <ic_tick class="icon" v-else-if="attrs.startInfo"></ic_tick>
                         </div>
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item" style="white-space: nowrap" role="button">
+                    <div class="item"  @click="page=1" :class="{active:page===1}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
                         مرحله :
                     </span>
                             <strong class="me-2">بررسی</strong>
-                            <ic_tick_green  :class="{'opacity-0':!attrs.check}" class="me-2"></ic_tick_green>
+                            <ic_tick_green v-if="attrs.demoCheck && attrs.demoCheck[0].name" class="icon"></ic_tick_green>
+                            <ic_tick class="icon" v-else-if="attrs.demoCheck"></ic_tick>
                         </div>
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item" style="white-space: nowrap" role="button">
+                    <div class="item"  @click="page=2" :class="{active:page===2}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
                         مرحله :
                     </span>
                             <strong class="me-2">تست</strong>
-                            <ic_tick_green :class="{'opacity-0':!attrs.test}" class="me-2"></ic_tick_green>
+                            <ic_tick_green v-if="attrs.demoTest && attrs.demoTest[0].name" class="icon"></ic_tick_green>
+                            <ic_tick class="icon" v-else-if="attrs.demoTest"></ic_tick>
                         </div>
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item" style="white-space: nowrap" role="button">
+                    <div class="item"  @click="page=3" :class="{active:page===3}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
                         مرحله :
                     </span>
                             <strong class="me-2">تحویل</strong>
-                            <ic_tick_green :class="{'opacity-0':!attrs.finish}" class="me-2"></ic_tick_green>
+                            <ic_tick_green v-if="attrs.finish && attrs.finish[0].name"
+                                           class="icon"></ic_tick_green>
+                            <ic_tick class="icon" v-else-if="attrs.finish"></ic_tick>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="w-100">
-                <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item w-100" style=";padding: 20px">
-                        <div class="order-detail__item flex-wrap justify-content-between" style="z-index: 6;position: relative">
-                            <div class="d-flex flex-wrap">
-                                <div class="item-processing ms-3">
-                                    <label class="switch-toggles">
-                                        <input type="checkbox">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <div class="me-2">دریافت اطلاعات</div>
-                                </div>
-                                <div class="item-processing mx-3">
-                                    <img src="/images/icons/calendar.svg" alt="">
-                                    <div class="me-2">ویژگی ها</div>
-                                </div>
-                                <div class="item-processing mx-3">
-                                    <img src="/images/icons/status.svg" alt="">
-                                    <div class="me-2">توضیحات</div>
-                                </div>
-                            </div>
-                            <div class="me-3">
-                                <button style="padding: 4px 18px;" class="me-2 btn btn--primary outline">
-                                    <b>
-                                    ارسال به مشتری
-                                    </b>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <OrderAttrsStart :attrs="attrs" :project="project" v-if="page===0"></OrderAttrsStart>
+                <OrderAttrsCheck :attrs="attrs" :project="project" v-if="page===1"></OrderAttrsCheck>
+                <OrderAttrsTest :attrs="attrs" :project="project" v-if="page===2"></OrderAttrsTest>
+                <OrderAttrsFinish :attrs="attrs" :project="project" v-if="page===3"></OrderAttrsFinish>
             </div>
         </div>
     </div>
@@ -114,11 +93,41 @@
 </template>
 
 <script setup>
-import AttrItem from "@/Components/Orders/AttrItem.vue";
-import Ic_tick_blue from "@/Components/svgs/ic_tick_blue.vue";
-import Ic_tick_green from "@/Components/svgs/ic_tick_green.vue";
 
-const prop = defineProps(['attrs','project'])
+import Ic_tick_green from "@/Components/svgs/ic_tick_green.vue";
+import Ic_tick from "@/Components/svgs/ic_tick.vue";
+
+import {ref} from "vue";
+import OrderAttrsStart from "@/Pages/Admin/Order/OrderAttrsStart.vue";
+import OrderAttrsCheck from "@/Pages/Admin/Order/OrderAttrsCheck.vue";
+import OrderAttrsTest from "@/Pages/Admin/Order/OrderAttrsTest.vue";
+import OrderAttrsFinish from "@/Pages/Admin/Order/OrderAttrsFinish.vue";
+const page = ref(0)
+const sentAllAttrs = ref(null)
+const prop = defineProps(['attrs', 'project'])
+const startAttrs = prop.attrs.startAttrs
+
+
+if ((prop.attrs.sentAllAttrs && prop.attrs.startAttrs)||prop.attrs.startInfo){
+    page.value=0
+}
+if (prop.attrs.demoCheck){
+    page.value=1
+}
+if (prop.attrs.demoTest){
+    page.value=2
+}
+if (prop.attrs.finish){
+    page.value=3
+}
+
+for (const i in startAttrs) {
+    if (startAttrs[i].value==null&&startAttrs[i].description==null){
+        sentAllAttrs.value = false
+    }
+}
+if (sentAllAttrs.value==null && startAttrs)
+    sentAllAttrs.value = true
 const changeProcessing = () => {
     let person = prompt("درصد را وارد کنید")
     if (person == null || person == "") {
@@ -139,7 +148,7 @@ const changeProcessingName = () => {
 
     } else {
         prop.attrs.processing[0].name = person
-        axios.post(route('admin.order.attr.edit', {id:prop.attrs.processing[0].project_id}), {
+        axios.post(route('admin.order.attr.edit', {id: prop.attrs.processing[0].project_id}), {
             type: 'processing',
             name: person,
             value: prop.attrs.processing[0].value,
@@ -191,4 +200,5 @@ const startProcessing = () => {
     axios.post(route('admin.order.attr.store'), data)
 
 }
+
 </script>

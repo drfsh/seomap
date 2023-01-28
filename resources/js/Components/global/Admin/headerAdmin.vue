@@ -1,6 +1,6 @@
 <template>
     <div class="content__header">
-        <a href="#" @click="showMenu" class="content__header__open-menu">
+        <a @click="showMenu" class="content__header__open-menu">
             <img src="/images/icons/menu.svg" alt="menu" />
         </a>
         <ul class="breadcrumb">
@@ -14,7 +14,7 @@
         </ul>
         <div class="content__header__actions">
 
-            <Link :href="route('logout')" method="post">
+            <Link as="button" :href="route('logout')" class="border-0 bg-transparent" method="post">
                 <img src="/images/icons/exit.svg" alt="exit"/>
             </Link>
 

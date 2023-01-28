@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'list'])->name('orders.list');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/order/{code}', [OrderController::class,'project'])->name('order');
+    Route::post('/order/file', [OrderController::class,'uploadAttrs'])->name('file.send');
+    Route::post('/order/demo', [OrderController::class,'demoChecked'])->name('demo.checked');
 
     Route::get('/invoice/pay/{id}', [\App\Http\Controllers\Panel\InvoiceController::class,'pay'])->name('invoice.pay');
     Route::any('/invoice/callback', [\App\Http\Controllers\Panel\InvoiceController::class,'callback'])->name('invoice.callback');
@@ -81,6 +83,11 @@ Route::middleware('auth.admin')->group(function () {
     Route::post('/admin/order/attr', [OrdersController::class,'attrStore'])->name('admin.order.attr.store');
     Route::post('/admin/order/status', [OrdersController::class,'status'])->name('admin.order.status');
     Route::post('/admin/order/update', [OrdersController::class,'update'])->name('admin.order.update');
+
+    Route::post('/admin/start/store', [OrdersController::class,'createStartAttrs'])->name('admin.start.store');
+    Route::post('/admin/check/store', [OrdersController::class,'createDemoAttrs'])->name('admin.demo.store');
+
+
 
     Route::post('/admin/invoice', [InvoiceController::class,'store'])->name('admin.invoice.store');
 

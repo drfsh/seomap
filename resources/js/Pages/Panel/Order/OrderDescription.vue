@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="attrs.attr">
         <div class="min-title">امکانات</div>
         <div class="row mt-4 px-2 order-detail">
             <div v-for="v in attrs.attr" class="mb-4 col-12 col-md-6 col-xl-3 col-lg-6">

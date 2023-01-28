@@ -2,7 +2,7 @@
     <div class="min-title">وضعیت</div>
     <div class="table-container mt-3">
         <div class="attrs justify-content-around">
-            <button @click="changeStatus(i)" class="btn btn--primary" :class="{'outline':i!==project.status}" v-for="(v,i) in status">{{v}}</button>
+            <button @click="changeStatus(v.key)" class="btn btn--primary" :class="{'outline':v.key!==project.status}" v-for="(v,i) in status">{{v.text}}</button>
         </div>
     </div>
 
@@ -75,12 +75,13 @@ const submit = () => {
     form.post(route('admin.order.update'));
 };
 const status = [
-    'درحال برسی',
-    'در انتظار پرداخت',
-    'درحال انجام',
-    'انتظار پرداخت نهایی',
-    'اتمام',
-    'لغو'
+    {text:'درحال برسی',key:0},
+    {text:'در انتظار پرداخت',key:1},
+    {text:'درانتظار دریافت اطلاعات',key:6},
+    {text:'درحال انجام',key:2},
+    {text:'انتظار پرداخت نهایی',key:3},
+    {text:'اتمام',key:4},
+    {text:'لغو',key:5},
 ]
 const separate = (price) => {
     return tools.separate(price);
@@ -89,5 +90,8 @@ const changeStatus = async (p) => {
     let {data} = await axios.post(route('admin.order.status'),{id:prop.project.id,status:p})
     prop.project.status = data.data.status
     prop.project.status_fa = data.data.status_fa
+    if (p===2){
+        location.reload()
+    }
 }
 </script>

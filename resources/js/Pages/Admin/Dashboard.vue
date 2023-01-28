@@ -62,12 +62,13 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="v in projects">
-                                        <td>#{{ v.code }}</td>
-                                        <td class="ltr">{{ v.created_at }}</td>
-                                        <td>{{v.service.name}}</td>
-                                        <td>{{ separate(v.fee) }} تومان</td>
-                                        <td class="text-yellow">{{ v.status_fa }}</td>
-                                        <td>
+                                        <td data-label="شماره سفارش">#{{ v.code }}</td>
+                                        <td data-label="تاریخ ثبت" class="ltr">{{ v.created_at }}</td>
+                                        <td data-label="نوع خدمات">{{v.service.name}}</td>
+                                        <td v-if="v.fee!==0">{{ separate(v.fee) }} تومان</td>
+                                        <td v-else>درحال برسی</td>
+                                        <td data-label="وضعیت"  :class="{'c-gold':v.status===0,'c-red':v.status===1||v.status===3||v.status===5,'c-green':v.status===2,'s-finish':v.status===4,}">{{ v.status_fa }}</td>
+                                        <td data-label="جزییات">
                                             <Link :href="route('admin.order',{code:v.code})">مشاهده</Link>
                                         </td>
                                     </tr>

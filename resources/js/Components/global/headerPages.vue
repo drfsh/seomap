@@ -1,6 +1,6 @@
 <template>
     <div class="content__header">
-        <a href="#" @click="showMenu" class="content__header__open-menu">
+        <a @click="showMenu" class="content__header__open-menu">
             <img src="/images/icons/menu.svg" alt="menu"/>
         </a>
         <ul class="breadcrumb">

@@ -24,6 +24,9 @@
         "vue-router": "^4.1.6"
     },
     "dependencies": {
-        "tom-select": "^2.2.2"
+        "@sipec/vue3-tags-input": "^3.0.4",
+        "jalali-moment": "^3.3.11",
+        "tom-select": "^2.2.2",
+        "unoverlay-vue": "^0.2.3"
     }
 }
