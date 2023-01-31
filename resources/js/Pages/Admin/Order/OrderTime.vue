@@ -36,7 +36,7 @@
             <div>
                 <div class="min-title">پیام ها</div>
 
-                <div v-for="v in attrs.pMessage" class="row m-0 mt-4 px-4 order-detail position-relative">
+                <div v-for="v in attrs.pMessage" class="row m-0 py-3 mt-4 px-4 order-detail position-relative">
                     <span class="data-left">{{ v.created_at_fa }}</span>
                     {{ v.description }}
                 </div>

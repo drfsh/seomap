@@ -81,6 +81,8 @@ class TicketController extends Controller
         $ticket = Ticket::where([['user_id',auth()->id()],['id',$request->ticketId]])->first();
         if (!$ticket) abort(500);
 
+        $ticket->status = 0;
+        $ticket->save();
 
         $message = new Message();
         $message->ticket_id = $ticket->id;

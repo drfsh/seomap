@@ -6,18 +6,18 @@
                     <ic_info style="width: 20px;" class="mx-2"></ic_info>
                     {{prop.attrs.finish[0].description}}
                 </div>
-                <div style="font-size: 15px;margin-right: 35px;margin-top: 10px;">
+                <div v-if="!attrs.finish[0].name" style="font-size: 15px;margin-right: 35px;margin-top: 10px;">
                     پس از مشاهده دمو,  تاییدیه و نظر خود را در رابطه با دموی اولیه ارسال کنید.
                 </div>
-                <span class="data-left" style="right: unset; left: 30px; top: 20px;">
+                <span class="data-left" style="right: unset; left: 17px; top: 17px;">
                     {{prop.attrs.finish[0].created_at_fa}}
                 </span>
                 <div class="mt-4 order-detail__item flex-wrap justify-content-between"
                      style="z-index: 6;position: relative">
                     <div class="col-12">
                         <div class="">
-                            <a class="btn btn--primary outline w-100" target="_blank" :href="prop.attrs.finish[0].value">
-                                مشاهده دمو
+                            <a class="btn py-3 btn--primary outline w-100" target="_blank" :href="prop.attrs.finish[0].value">
+                                مشاهده سایت
                             </a>
                         </div>
                         <InputError :message="form.errors.url"></InputError>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div v-else class="order-detail mt-4  position-relative">
-                    <span class="data-left" style="right: unset; left: 30px; top: 20px;">
+                    <span class="data-left" style="right: unset; left: 17px; top: 12px;">
                     {{prop.attrs.finish[0].updated_at_fa}}
                 </span>
                     {{attrs.finish[0].name}}

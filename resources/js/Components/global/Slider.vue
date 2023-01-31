@@ -43,7 +43,7 @@
                     <Link :class="{active:$page.component==='Panel/Orders'}" :href="route('orders.list')">
                         <ic_list_search></ic_list_search>
                         پیگیری سفارش
-                        <div class="count" style="animation: pulse-primary 2s infinite;" v-if="cAlert.projects"></div>
+                        <div class="count" style="animation: pulse-primary 2s infinite;" v-if="cAlert.projects">1</div>
                     </Link>
                 </li>
 

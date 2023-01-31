@@ -165,7 +165,8 @@ input[type=number] {
 }
 
 .sidebar .active .count, .sidebar a:hover .count {
-    background: #ff9800;
+    background: #bcc4ff;
+    color: #000000 !important;
 }
 
 .content__card__head__title img {
@@ -262,7 +263,9 @@ input[type=number] {
     border: 1px solid #eeeeee;
     margin: 5px 5px;
 }
-
+.attrs .item.disabled{
+    opacity: .5;
+}
 .attrs .item .icon {
     position: absolute;
     left: 10px;
@@ -376,6 +379,7 @@ td.error:before {
 
 .vue-tags-input {
     padding: 0 !important;
+    width: 100%!important;
 }
 
 .ti-autocomplete {
@@ -406,18 +410,22 @@ td.error:before {
 }
 .statuses{
     display: flex;
+    flex-direction: column;
 }
 .statuses .titles{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 .statuses .titles .attrs .item{
     transition: 0.2s;
-    width: 185px;
+    width: 200px;
 }
 
 .statuses .titles .attrs .item.active {
     border: 1px solid #2f5bea;
+    opacity: 1;
 }
 .deadline {
     position: relative;
@@ -477,7 +485,7 @@ td.error:before {
     right: 0;
     top: 10px;
     text-align: left;
-    font-size: 12px;
+    font-size: 14px;
     color: #7b7b7b;
 }
 .deadline .get-attrs {
@@ -584,4 +592,10 @@ td.error:before {
 }
 .color-type{
     margin-top: 10px;
+}
+svg.st-blue path {
+    stroke: #2f5bea;
+}
+svg.st-red path {
+    stroke: red;
 }

@@ -162,7 +162,7 @@ class OrderController extends Controller
         ]);
         $invoice = Invoice::create([
             'info'=>'پیش پرداخت اولیه',
-            'amount'=>2000000,//2,000,000 toman
+            'amount'=>1000000,//1,000,000 toman
             'project_id'=>$project->id,
             'data'=>0
         ]);
@@ -287,6 +287,7 @@ class OrderController extends Controller
             $attr->value = $path;
         }
         $attr->description = $info;
+        $attr->value2 = null;
         $attr->save();
 
         return redirect(route('order',['code'=>$attr->project->code]));

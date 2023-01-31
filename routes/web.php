@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth.admin')->group(function () {
     Route::get('/admin', [HomeController::class,'view'])->name('admin');
+    Route::get('/admin/infoSlider', [HomeController::class,'infoSlider'])->name('admin.infoSlider');
 
     Route::get('/admin/user', [UserController::class,'view'])->name('admin.users');
     Route::get('/admin/user/create', [UserController::class,'create'])->name('admin.user.create');
@@ -85,6 +86,8 @@ Route::middleware('auth.admin')->group(function () {
     Route::post('/admin/order/update', [OrdersController::class,'update'])->name('admin.order.update');
 
     Route::post('/admin/start/store', [OrdersController::class,'createStartAttrs'])->name('admin.start.store');
+    Route::post('/admin/file/ok', [OrdersController::class,'changeStatusFile'])->name('admin.file.ok');
+
     Route::post('/admin/check/store', [OrdersController::class,'createDemoAttrs'])->name('admin.demo.store');
 
 

@@ -1,7 +1,7 @@
 @media (max-width: 600px) {
     .tabby .nav{
         padding: 9px;
-        flex-direction: column;
+        justify-content: center;
     }
     .tabby .nav .nav-link{
         text-align: right;
@@ -35,17 +35,32 @@
         font-weight: bold;
         text-transform: uppercase;
     }
-    .statuses{
-        flex-direction: column;
-    }
     .statuses .titles{
         flex-wrap: wrap;
         flex-direction: row;
     }
     .statuses .titles .attrs .item{
-        width: unset;
+        width: 100%;
+        margin-bottom: 0;
+        margin-top: 0;
     }
     .modal-container{
         width: 352px;
+    }
+    .infos p{
+        font-size: 13px;
+    }
+    .tabby .nav .nav-link{
+        font-size: 14px;
+    }
+    .statuses .titles .attrs{
+        width: 50%;
+    }
+    .attrs .item .icon{
+        left: -3px;
+        top: -2px;
+    }
+    .content__card__head a{
+        margin-top: 20px;
     }
 }

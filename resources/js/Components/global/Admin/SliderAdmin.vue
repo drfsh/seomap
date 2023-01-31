@@ -57,6 +57,7 @@
                     $page.component==='Admin/Order')}" :href="route('admin.orders')">
                         <ic_list_search></ic_list_search>
                         پیگیری سفارشات
+                        <div class="count" style="animation: pulse-primary 2s infinite;" v-if="alerts.projects">{{alerts.projects}}</div>
                     </Link>
                 </li>
 
@@ -65,6 +66,7 @@
                           :href="route('admin.tickets')">
                         <ic_chats></ic_chats>
                         پشتیبانی
+                        <div class="count" style="animation: pulse-primary 2s infinite;" v-if="alerts.tickets">{{alerts.tickets}}</div>
                     </Link>
                 </li>
                 <li>
@@ -96,11 +98,14 @@ import Ic_chats from "../../svgs/ic_chats.vue";
 import {Link, usePage} from '@inertiajs/inertia-vue3';
 import {onMounted, onUnmounted, ref, watch} from "vue";
 import Ic_user_edit from "@/Components/svgs/ic_user_edit.vue";
-
+const alerts = ref({projects:0,tickets:0})
 const user = usePage().props.value.auth.user;
 const menuShow = ref(false)
 let timer = null
-onMounted(() => {
+onMounted(async () => {
+    let {data} = await axios.get(route('admin.infoSlider'))
+    alerts.value = data.data
+    console.log(alerts.value)
     timer = setInterval(() => {
         if (window.menuShow) {
             menuShow.value = true

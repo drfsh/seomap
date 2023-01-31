@@ -84,6 +84,7 @@ class TicketController extends Controller
         if (!$ticket) abort(500);
 
         $ticket->new = true;
+        $ticket->status = 2;
         $ticket->save();
 
         $message = new Message();

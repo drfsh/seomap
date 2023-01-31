@@ -108,7 +108,7 @@
                             <div class="result-text">
                                 <img src="/images/icons/wallet-money-primary.svg" alt="">
                                 حق کارشناسی و برسی :
-                                <span>2.000.000 تومان</span>
+                                <span>1.000.000 تومان</span>
                             </div>
                             <button class="btn btn--primary">
                                 پرداخت و ثبت سفارش

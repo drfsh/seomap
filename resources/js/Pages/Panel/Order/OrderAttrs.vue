@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item"  @click="attrs.demoCheck?page=1:undefined" :class="{active:page===1}"  style="white-space: nowrap" role="button">
+                    <div class="item"  @click="attrs.demoCheck?page=1:undefined" :class="{active:page===1,disabled:setup<1}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item"  @click="attrs.demoTest?page=2:undefined" :class="{active:page===2}"  style="white-space: nowrap" role="button">
+                    <div class="item"  @click="attrs.demoTest?page=2:undefined" :class="{active:page===2,disabled:setup<2}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="attrs" style="flex-wrap: nowrap">
-                    <div class="item"  @click="attrs.finish?page=3:undefined" :class="{active:page===3}"  style="white-space: nowrap" role="button">
+                    <div class="item"  @click="attrs.finish?page=3:undefined" :class="{active:page===3,disabled:setup<3}"  style="white-space: nowrap" role="button">
                         <div class="order-detail__item">
                     <span>
                         <img src="/images/icons/receipt-2.svg" alt="">
@@ -103,24 +103,26 @@ import OrderAttrsCheck from "@/Pages/Panel/Order/OrderAttrsCheck.vue";
 import OrderAttrsTest from "@/Pages/Panel/Order/OrderAttrsTest.vue";
 import OrderAttrsFinish from "@/Pages/Panel/Order/OrderAttrsFinish.vue";
 const page = ref(0)
+const setup = ref(0)
+
 const sentAllAttrs = ref(true)
 const prop = defineProps(['attrs', 'project'])
 const startAttrs = prop.attrs.startAttrs
 
+if ((prop.attrs.sentAllAttrs && prop.attrs.startAttrs) || prop.attrs.startInfo) {
+    setup.value = 0
+}
+if (prop.attrs.demoCheck) {
+    setup.value = 1
+}
+if (prop.attrs.demoTest) {
+    setup.value = 2
+}
+if (prop.attrs.finish) {
+    setup.value = 3
+}
+page.value = setup.value
 
-if ((prop.attrs.sentAllAttrs && prop.attrs.startAttrs)||prop.attrs.startInfo){
-    page.value=0
-}
-if (prop.attrs.demoCheck){
-    page.value=1
-}
-if (prop.attrs.demoTest){
-    page.value=2
-}
-
-if (prop.attrs.finish){
-    page.value=3
-}
 for (const i in startAttrs) {
     if (startAttrs[i].value==null&&startAttrs[i].description==null){
         sentAllAttrs.value = false

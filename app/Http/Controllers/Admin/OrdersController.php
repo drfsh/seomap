@@ -16,71 +16,76 @@ use Morilog\Jalali\Jalalian;
 class OrdersController extends Controller
 {
     use Smstrait;
-    public function view(Request $request){
+
+    public function view(Request $request)
+    {
         $code = (int)$request->code;
         if (!$code)
-        return Inertia::render('Admin/Orders',[
-            'projects'=>Project::orderBy('created_at','desc')->orderBy('status','desc')->with('service')->paginate(10),
-            'pComing'=>Project::where('status',2)->orderBy('created_at','desc')->with('service')->paginate(10),
-            'pPey'=>Project::where('status',3)->orWhere('status',1)->orderBy('created_at','desc')->with('service')->paginate(10),
-            'pOk'=>Project::where('status',4)->orderBy('created_at','desc')->with('service')->paginate(10),
-            'pCancel'=>Project::where('status',5)->orderBy('created_at','desc')->with('service')->paginate(10),
-        ]);
-        else{
+            return Inertia::render('Admin/Orders', [
+                'projects' => Project::orderBy('created_at', 'desc')->orderBy('status', 'desc')->with('service')->paginate(10),
+                'pComing' => Project::where('status', 2)->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pPey' => Project::where('status', 3)->orWhere('status', 1)->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pOk' => Project::where('status', 4)->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pCancel' => Project::where('status', 5)->orderBy('created_at', 'desc')->with('service')->paginate(10),
+            ]);
+        else {
             //searching by code
-            return Inertia::render('Admin/Orders',[
-                'projects'=>Project::where('id',$code-3500)->orderBy('created_at','desc')->with('service')->orderBy('status','desc')->paginate(10),
-                'pComing'=>Project::where([['status',2],['id',$code-3500]])->with('service')->orderBy('created_at','desc')->paginate(10),
-                'pPey'=>Project::where([['status',3],['id',$code-3500]])->orWhere([['status',1],['id',$code-3500]])->with('service')->orderBy('created_at','desc')->paginate(10),
-                'pOk'=>Project::where([['status',4],['id',$code-3500]])->orderBy('created_at','desc')->with('service')->paginate(10),
-                'pCancel'=>Project::where([['status',5],['id',$code-3500]])->orderBy('created_at','desc')->with('service')->paginate(10),
-                'code'=>$code
+            return Inertia::render('Admin/Orders', [
+                'projects' => Project::where('id', $code - 3500)->orderBy('created_at', 'desc')->with('service')->orderBy('status', 'desc')->paginate(10),
+                'pComing' => Project::where([['status', 2], ['id', $code - 3500]])->with('service')->orderBy('created_at', 'desc')->paginate(10),
+                'pPey' => Project::where([['status', 3], ['id', $code - 3500]])->orWhere([['status', 1], ['id', $code - 3500]])->with('service')->orderBy('created_at', 'desc')->paginate(10),
+                'pOk' => Project::where([['status', 4], ['id', $code - 3500]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pCancel' => Project::where([['status', 5], ['id', $code - 3500]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'code' => $code
             ]);
         }
     }
 
-    public function project($code){
-        $code = (int) $code;
-        $project = Project::with(['user','attr_new','ticket','invoices','plan','service','access'])->find($code-3500);
+    public function project($code)
+    {
+        $code = (int)$code;
+        $project = Project::with(['user', 'attr_new', 'ticket', 'invoices', 'plan', 'service', 'access'])->find($code - 3500);
 //        return $this->sendTrue($project,[]);
         if (!$project) abort(404);
         $attrsOne = $project->attrs;
         $attrs = [];
-         $i = $project->invoices;
+        $i = $project->invoices;
         $dontPay = 0;
-        foreach ($i as $v)
-        {
-            if ($v->status!=1)
+        foreach ($i as $v) {
+            if ($v->status != 1)
                 $dontPay++;
         }
-        foreach ($attrsOne as $attr){
-                $attrs[$attr->type][] = $attr;
+        foreach ($attrsOne as $attr) {
+            $attrs[$attr->type][] = $attr;
         }
 
 
-        return Inertia::render('Admin/Order',[
-            'project'=>$project,
-            'attrs'=>$attrs,
-            'dont_pay'=>$dontPay
+        return Inertia::render('Admin/Order', [
+            'project' => $project,
+            'attrs' => $attrs,
+            'dont_pay' => $dontPay
         ]);
     }
 
-    public function attrUpdate($id,Request $request){
+    public function attrUpdate($id, Request $request)
+    {
         $type = $request->type;
         $name = $request->name;
         $value = $request->value;
         $des = $request->des;
-        $attr = Attribute::where([['project_id',$id],['type',$type]])->first();
-        if ($attr){
+        $attr = Attribute::where([['project_id', $id], ['type', $type]])->first();
+        if ($attr) {
             $attr->update([
-                'name'=>$name,
-                'value'=>$value,
-                'description'=>$des
+                'name' => $name,
+                'value' => $value,
+                'description' => $des
             ]);
         }
-        return $this->sendTrue([],[]);
+        return $this->sendTrue([], []);
     }
-    public function attrStore(Request $request){
+
+    public function attrStore(Request $request)
+    {
 //        dd('ddd');
         $type = $request->type;
         $name = $request->name;
@@ -88,21 +93,24 @@ class OrdersController extends Controller
         $des = $request->description;
         $pro = $request->project_id;
         $a = Attribute::create([
-            'name'=>$name,
-            'value'=>$value,
-            'description'=>$des,
-            'type'=>$type,
-            'project_id'=>$pro,
+            'name' => $name,
+            'value' => $value,
+            'description' => $des,
+            'type' => $type,
+            'project_id' => $pro,
         ]);
-        return $this->sendTrue($pro,[]);
-    }
-    public function attrDelete($id){
-        $attr = Attribute::find($id);
-        $attr->delete();
-        return $this->sendTrue([],[]);
+        return $this->sendTrue($pro, []);
     }
 
-    public function status(Request $request){
+    public function attrDelete($id)
+    {
+        $attr = Attribute::find($id);
+        $attr->delete();
+        return $this->sendTrue([], []);
+    }
+
+    public function status(Request $request)
+    {
         $id = $request->id;
         $status = $request->status;
         $p = Project::find($id);
@@ -136,34 +144,33 @@ class OrdersController extends Controller
 //            }
 //        }
 
-        if ($status==2){
+        if ($status == 2) {
             $haInfo = false;
-            foreach ($p->attrs as $attr){
-                if ($attr->type=='startDate')
-                {
+            foreach ($p->attrs as $attr) {
+                if ($attr->type == 'startDate') {
                     $haInfo = $attr;
                     break;
                 }
             }
             if (!$haInfo) {
                 Attribute::create([
-                    'name'=>'start',
-                    'value'=>'start',//process
-                    'description'=>'start',
-                    'type'=>'startDate',
-                    'project_id'=>$p->id,
+                    'name' => 'start',
+                    'value' => 'start',//process
+                    'description' => 'start',
+                    'type' => 'startDate',
+                    'project_id' => $p->id,
                 ]);
             }
         }
 
 
-
         $p->status = $status;
         $p->save();
-        return $this->sendTrue($p,[]);
+        return $this->sendTrue($p, []);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $title = $request->title;
         $fee = $request->fee;
         $days = $request->days;
@@ -174,18 +181,18 @@ class OrdersController extends Controller
         $p->fee = $fee;
         $p->save();
 
-        return redirect(route('admin.order',['code'=>$p->code]));
+        return redirect(route('admin.order', ['code' => $p->code]));
     }
 
-    public function createStartAttrs(Request $request){
+    public function createStartAttrs(Request $request)
+    {
         $request->validate([
             'info' => ['required'],
         ]);
         $p = Project::find($request->project_id);
         $haInfo = false;
-        foreach ($p->attrs as $attr){
-            if ($attr->type=='startInfo')
-            {
+        foreach ($p->attrs as $attr) {
+            if ($attr->type == 'startInfo') {
                 $haInfo = $attr;
                 break;
             }
@@ -198,26 +205,26 @@ class OrdersController extends Controller
                 'value' => false,
                 'type' => 'startInfo'
             ]);
-        }
-        else{
+        } else {
             $haInfo->description = $request->info;
             $haInfo->save();
         }
 
         $attrs = $request->attrs;
-        foreach ($attrs as $attr){
+        foreach ($attrs as $attr) {
             Attribute::create([
-                'name'=>$attr['text'],
-                'project_id'=> $request->project_id,
-                'description'=>null,
-                'value'=>null,
-                'type'=>'startAttrs'
+                'name' => $attr['text'],
+                'project_id' => $request->project_id,
+                'description' => null,
+                'value' => null,
+                'type' => 'startAttrs'
             ]);
         }
-        return redirect(route('admin.order',['code'=>$p->code]));
+        return redirect(route('admin.order', ['code' => $p->code]));
     }
 
-    public function createDemoAttrs(Request $request){
+    public function createDemoAttrs(Request $request)
+    {
         $request->validate([
             'info' => ['required'],
             'type' => ['required'],
@@ -226,9 +233,8 @@ class OrdersController extends Controller
         $p = Project::find($request->project_id);
         $type = $request->type;
         $haInfo = false;
-        foreach ($p->attrs as $attr){
-            if ($attr->type==$type)
-            {
+        foreach ($p->attrs as $attr) {
+            if ($attr->type == $type) {
                 $haInfo = $attr;
                 break;
             }
@@ -240,13 +246,27 @@ class OrdersController extends Controller
                 'value' => $request->url,
                 'type' => $type
             ]);
-        }
-        else{
+        } else {
             $haInfo->description = $request->info;
             $haInfo->value = $request->url;
             $haInfo->save();
         }
 
-        return redirect(route('admin.order',['code'=>$p->code]));
+        return redirect(route('admin.order', ['code' => $p->code]));
+    }
+
+    public function changeStatusFile(Request $request)
+    {
+        $id = $request->attr_id;
+        $value = $request->value2;
+        $attr = Attribute::find($id);
+
+        if ($value == 0)
+            $attr->value2 = $request->info?$request->info:'رد شده!فایل صحیح را ارسال کنید.';
+        else
+            $attr->value2 = $value;
+        $attr->save();
+        $p = $attr->project;
+        return redirect(route('admin.order', ['code' => $p->code]));
     }
 }

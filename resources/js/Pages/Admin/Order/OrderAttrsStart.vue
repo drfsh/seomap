@@ -4,13 +4,6 @@
             <div class="order-detail__item flex-wrap justify-content-between"
                  style="z-index: 6;position: relative">
                 <div class="d-flex flex-wrap">
-                    <div class="item-processing ms-3">
-                        <label class="switch-toggles">
-                            <input type="checkbox" disabled v-model="isRun">
-                            <span class="slider round"></span>
-                        </label>
-                        <div class="me-2">دریافت اطلاعات</div>
-                    </div>
                     <div role="button" class="item-processing me-3" @click="page=0" :class="{active:page===0}">
                         <ic_list></ic_list>
                         <div class="me-2">توضیحات</div>
@@ -20,19 +13,12 @@
                         <div class="me-2">اطلاعات دریافتی</div>
                         <span style="left: -2px;top: -3px;" v-if="files>0" class="count">{{files}}</span>
                     </div>
-                    <div v-if="isRun" class="item-processing me-3">
-                        <img src="/images/icons/calendar.svg" alt="">
-                        <div class="me-2">{{prop.attrs.startInfo[0].created_at_fa}}</div>
-                    </div>
 
                 </div>
-                <div class="me-3">
-                    <button  @click="setStatus" style="padding: 11px 18px;" class="me-2 btn btn--primary outline">
-                        <b v-if="!form.processing">
-                            ارسال به مشتری
-                        </b>
-                        <Loading v-else color="#2f5bea"></Loading>
-                    </button>
+
+                <div v-if="isRun" class="item-processing me-3">
+                    <img src="/images/icons/calendar.svg" alt="">
+                    <div class="me-2">{{prop.attrs.startInfo[0].created_at_fa}}</div>
                 </div>
             </div>
             <div v-if="page===0">
@@ -59,6 +45,15 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="mt-3 text-start">
+                    <button  @click="setStatus" style="padding: 11px 18px;" class="me-2 btn btn--primary outline">
+                        <b v-if="!form.processing">
+                            ارسال به مشتری
+                        </b>
+                        <Loading v-else color="#2f5bea"></Loading>
+                    </button>
+                </div>
             </div>
             <div v-else>
                 <div style="font-size: 14px;margin-top: 35px;">
@@ -68,7 +63,9 @@
 
                 <div class="row m-0 mt-4 px-2 order-detail">
                     <div :role="(v.value!=null || v.description!=null)?'button':''" @click="(v.value!=null || v.description!=null)?openFile(v):undefined" v-for="v in attrs.startAttrs" class="mb-4 col-12 col-md-6 col-xl-4 col-lg-6">
-                        <ic_tick_blue v-if="v.value!=null || v.description!=null" ></ic_tick_blue>
+                        <ic_close_circle v-if="(v.value!=null || v.description!=null) && (v.value2!=1 && v.value2 !=null)" ></ic_close_circle>
+                        <ic_tick_blue v-else-if="(v.value!=null || v.description!=null) && v.value2==1" ></ic_tick_blue>
+                        <ic_document_uploaded v-else-if="v.value!=null || v.description!=null" ></ic_document_uploaded>
                         <ic_circle v-else></ic_circle>
                         <strong style="font-size: 13px"> &nbsp; {{ v.name }} </strong>
                     </div>
@@ -92,6 +89,9 @@ import InputError from "@/Components/InputError.vue";
 import Ic_info from "@/Components/svgs/ic_info.vue";
 import Ic_timer from "@/Components/svgs/ic_timer.vue";
 import PopupShowFile from "@/Components/Orders/popupShowFile.vue";
+import Ic_tick from "@/Components/svgs/ic_tick.vue";
+import Ic_close_circle from "@/Components/svgs/ic_close_circle.vue";
+import Ic_document_uploaded from "@/Components/svgs/ic_document_uploaded.vue";
 
 const prop = defineProps(['attrs','project'])
 const info = ref(null)

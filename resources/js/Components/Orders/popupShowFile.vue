@@ -1,45 +1,33 @@
-<!-- overlay.vue -->
 <script setup>
 import moment from "jalali-moment";
-import InputError from "@/Components/InputError.vue";
 import {useForm} from "@inertiajs/inertia-vue3";
-import {ref, watch} from "vue";
 import Loading from "@/Components/Loading.vue";
-import Ic_danger from "@/Components/svgs/ic_danger.vue";
+import Ic_tick_blue from "@/Components/svgs/ic_tick_blue.vue";
+import Ic_close_circle from "@/Components/svgs/ic_close_circle.vue";
 
 const props = defineProps(['visible', 'attr'])
 const emit = defineEmits(['update:visible']);
 const dataFormat = (date, format) => {
     return moment(date, 'YYYY-MM-DDTH:mm:ss.000000Z').locale('fa').format(format)
 }
-const textFile = ref(null)
-
 const form = useForm({
-    file:null,
-    info:null,
-    attr_id:null,
+    value2: null,
+    attr_id: null,
+    info: null,
 })
-const sendFile = async () => {
-    if (form.file==null && (form.info==null || form.info==''))
-        return
+const changeStatus = (i) => {
+    form.value2 = i
     form.attr_id = props.attr.id
-    form.post(route('file.send'),{
-        forceFormData:true,
-        onFinish:()=>{
-            form.file=null
-            form.info=null
-            emit('update:visible', false)
+    form.post(route('admin.file.ok'), {
+        onSuccess: () => {
+            if (i === 0)
+                props.attr.value2 = form.info
+            else
+                props.attr.value2 = i
+            form.info = null
         }
     })
 }
-const selectFile = (event) => {
-    if (event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        form.file = file
-        textFile.value = file.name
-    }
-}
-
 </script>
 
 <template>
@@ -48,8 +36,11 @@ const selectFile = (event) => {
             <div class="modal-wrapper">
                 <div class="shadow" @click="$emit('update:visible', false)"></div>
                 <div class="modal-container">
-                    <div v-if="attr.value!=null||attr.description!=null">
-                        <div class="title">{{ attr.name }}</div>
+                    <div>
+                        <div class="title">{{ attr.name }}
+                            <ic_close_circle v-if="(attr.value2!=1 && attr.value2 !=null)"></ic_close_circle>
+                            <ic_tick_blue v-else-if="attr.value2==1"></ic_tick_blue>
+                        </div>
                         <span style="right: unset;left: 30px;top: 20px"
                               class="data-left">{{ dataFormat(attr.updated_at, 'DD MMMM') }}</span>
                         <div v-if="attr.description" class="row m-0 mt-4 px-4 order-detail position-relative">
@@ -60,37 +51,26 @@ const selectFile = (event) => {
                                 بازکردن فایل
                             </a>
                         </div>
-                    </div>
-                    <div v-else>
-                        <div class="title">{{ attr.name }}</div>
-                        <div class="mt-4 order-detail__item flex-wrap justify-content-between"
-                             style="z-index: 6;position: relative">
-                            <div class="" style="font-size: 13px;">فایل یا توضیحات خود را ارسال کنید</div>
-                            <div class="mb-3" style="font-size: 13px;">
-                                <ic_danger style="width: 13px;"></ic_danger>
-                                 فایل و توضیحات ارسالی قابل ویرایش نمیباشد پس در ارسال آن دقت فرمایید
-                            </div>
-                            <div class="col-12">
+                        <hr>
+                        <div class="mt-3 text-start">
+                            <div class="col-12 mb-2">
                                 <div class="input-group">
-                                    <textarea style="width: 120px" v-model="form.info" type="text" class="form-control" placeholder="توضیحات"></textarea>
+                                    <input style="width: 120px" v-model="form.info" type="text" class="form-control"
+                                           :placeholder="(attr.value2!=1 && attr.value2!=null)?attr.value2:'توضیحات'"/>
                                 </div>
-                                <InputError :message="form.errors.info"></InputError>
                             </div>
-                        </div>
-                        <div class=" d-flex aling-items-center mt-3">
-                            <div class="file-upload">
-                                <label for="file-upload__input">
-                                    <img src="/images/icons/export.svg" alt="">
-                                    فایلهای خود را آپلود کنید
-                                </label>
-                                <input @change="selectFile" id="file-upload__input" type="file" multiple="" hidden="">
-                                <span class="file-upload__names">{{ textFile }}</span>
-                            </div>
-                            <InputError class="mt-2" :message="form.errors.file"/>
-                        </div>
-                        <div class=" text-start align-self-end">
-                            <button @click="sendFile" type="button" class="btn btn--primary outline">
-                                <span v-if="!form.processing">ارسال</span>
+                            <button @click="changeStatus(0)" style="padding: 11px 18px;"
+                                    class="me-2 btn btn-outline-danger outline">
+                                <b v-if="!form.processing">
+                                    رد
+                                </b>
+                                <Loading v-else color="#2f5bea"></Loading>
+                            </button>
+                            <button @click="changeStatus(1)" style="padding: 11px 18px;"
+                                    class="me-2 btn btn--primary outline">
+                                <b v-if="!form.processing">
+                                    تایید
+                                </b>
                                 <Loading v-else color="#2f5bea"></Loading>
                             </button>
                         </div>
