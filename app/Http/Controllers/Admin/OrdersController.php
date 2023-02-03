@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Access;
 use App\Models\Attribute;
 use App\Models\Invoice;
 use App\Models\Project;
@@ -223,7 +224,111 @@ class OrdersController extends Controller
         return redirect(route('admin.order', ['code' => $p->code]));
     }
 
-    public function createDemoAttrs(Request $request)
+
+    public function changeStatusFile(Request $request)
+    {
+        $id = $request->attr_id;
+        $value = $request->value2;
+        $attr = Attribute::find($id);
+
+        if ($value == 0)
+            $attr->value2 = $request->info?$request->info:'رد شده!فایل صحیح را ارسال کنید.';
+        else
+            $attr->value2 = $value;
+        $attr->save();
+        $p = $attr->project;
+        return redirect(route('admin.order', ['code' => $p->code]));
+    }
+
+    public function setup(Request $request){
+        $request->validate([
+           'description'=>'required',
+           'days'=>'required',
+           'price'=>'required',
+           'id'=>'required',
+        ]);
+
+        $project = Project::find($request->id);
+        if (!$project) abort(404);
+
+        $project->fee = $request->price;
+        $project->days = $request->days;
+        $project->status = 1;
+        $project->save();
+
+        $description = false;
+        foreach ($project->attrs as $attr) {
+            if ($attr->type == 'setupDescription') {
+                $description = $attr;
+                break;
+            }
+        }
+        if (!$description) {
+            Attribute::create([
+                'name' => 'setupDescription',
+                'project_id' => $request->id,
+                'description' => $request->description,
+                'type' => 'setupDescription'
+            ]);
+        } else {
+            $description->description = $request->description;
+            $description->save();
+        }
+
+        return redirect(route('admin.order', ['code' => $project->code]));
+    }
+    public function start(Request $request){
+        $request->validate([
+           'description'=>'required',
+           'id'=>'required',
+        ]);
+
+        $project = Project::find($request->id);
+        if (!$project) abort(404);
+
+        $project->status = 3;
+        $project->save();
+
+        $description = false;
+        foreach ($project->attrs as $attr) {
+            if ($attr->type == 'startDescription') {
+                $description = $attr;
+                break;
+            }
+        }
+        if (!$description) {
+            Attribute::create([
+                'name' => 'start description',
+                'project_id' => $request->id,
+                'description' => $request->description,
+                'type' => 'startDescription'
+            ]);
+        } else {
+            $description->description = $request->description;
+            $description->save();
+        }
+
+        $haInfo = false;
+        foreach ($project->attrs as $attr) {
+            if ($attr->type == 'startDate') {
+                $haInfo = $attr;
+                break;
+            }
+        }
+        if (!$haInfo) {
+            Attribute::create([
+                'name' => 'start',
+                'value' => 'start',//process
+                'description' => 'start',
+                'type' => 'startDate',
+                'project_id' => $project->id,
+            ]);
+        }
+
+        return redirect(route('admin.order', ['code' => $project->code]));
+    }
+
+    public function sendDemo(Request $request)
     {
         $request->validate([
             'info' => ['required'],
@@ -231,7 +336,11 @@ class OrdersController extends Controller
             'url' => ['required'],
         ]);
         $p = Project::find($request->project_id);
-        $type = $request->type;
+        if (!$p) abort(404);
+        $p->status = 4;
+        $p->save();
+
+        $type = 'demo';
         $haInfo = false;
         foreach ($p->attrs as $attr) {
             if ($attr->type == $type) {
@@ -241,6 +350,7 @@ class OrdersController extends Controller
         }
         if (!$haInfo) {
             Attribute::create([
+                'name' => 'demo web',
                 'project_id' => $request->project_id,
                 'description' => $request->info,
                 'value' => $request->url,
@@ -255,18 +365,70 @@ class OrdersController extends Controller
         return redirect(route('admin.order', ['code' => $p->code]));
     }
 
-    public function changeStatusFile(Request $request)
-    {
-        $id = $request->attr_id;
-        $value = $request->value2;
-        $attr = Attribute::find($id);
+    public function finish(Request $request){
 
-        if ($value == 0)
-            $attr->value2 = $request->info?$request->info:'رد شده!فایل صحیح را ارسال کنید.';
-        else
-            $attr->value2 = $value;
-        $attr->save();
-        $p = $attr->project;
+        $request->validate([
+            'description' => ['required'],
+            'web' => ['required'],
+            'web_user' => ['required'],
+            'web_pass' => ['required'],
+            'host' => ['required'],
+            'host_user' => ['required'],
+            'host_pass' => ['required'],
+            'email_info' => ['required'],
+            'email_admin' => ['required'],
+        ]);
+
+
+        $p = Project::find($request->project_id);
+        if (!$p) abort(404);
+        $p->status = 5;
+        $p->save();
+
+        $type = 'finish';
+        $haInfo = false;
+        foreach ($p->attrs as $attr) {
+            if ($attr->type == $type) {
+                $haInfo = $attr;
+                break;
+            }
+        }
+        if (!$haInfo) {
+            Attribute::create([
+                'name' => 'finish web',
+                'project_id' => $request->project_id,
+                'description' => $request->description,
+                'value' => json_encode($request->email_info),
+                'value2' => json_encode($request->email_admin),
+                'type' => $type
+            ]);
+        } else {
+            $haInfo->description = $request->description;
+            $haInfo->value = $request->email_info;
+            $haInfo->value2 = $request->email_admin;
+            $haInfo->save();
+        }
+        $access = $p->access;
+        if ($access){
+            $access->update([
+                'web'=>$request->web,
+                'web_username'=>$request->web_user,
+                'web_password'=>$request->web_pass,
+                'host'=>$request->host,
+                'host_username'=>$request->host_user,
+                'host_password'=>$request->host_pass,
+            ]);
+        }else{
+            Access::create([
+                'project_id'=>$p->id,
+                'web'=>$request->web,
+                'web_username'=>$request->web_user,
+                'web_password'=>$request->web_pass,
+                'host'=>$request->host,
+                'host_username'=>$request->host_user,
+                'host_password'=>$request->host_pass,
+            ]);
+        }
         return redirect(route('admin.order', ['code' => $p->code]));
     }
 }

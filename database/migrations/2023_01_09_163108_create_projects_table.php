@@ -22,6 +22,13 @@ return new class extends Migration
             $table->integer('days')->default(0);
             $table->integer('status')->default(0);
             //0=درحال برسی و 1=در انتضار پرداخت و  و2=درحال انجام و 3=درانتضار پرداخت نهایی و 4=اتمام و 5=لغو و
+            // 1- = لغو
+            // 0 = درحال برسی
+            // 1 = دریافت اطلاعات و پرداخت اولیه
+            // 2 = بررسی اطلاعات
+            // 3 = درحال انجام
+            // 4 = ارسال دمو پروژه
+            // 5 = تحویل پروژه
             $table->string('description',5000);
             $table->string('file')->nullable();
             $table->integer('fee')->default(0);

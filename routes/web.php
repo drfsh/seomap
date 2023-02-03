@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{code}', [OrderController::class,'project'])->name('order');
     Route::post('/order/file', [OrderController::class,'uploadAttrs'])->name('file.send');
     Route::post('/order/demo', [OrderController::class,'demoChecked'])->name('demo.checked');
+    Route::get('/order/start/{id}', [OrderController::class,'start'])->name('order.start');
+    Route::get('/order/finish/{id}', [OrderController::class,'finish'])->name('order.finish');
 
     Route::get('/invoice/pay/{id}', [\App\Http\Controllers\Panel\InvoiceController::class,'pay'])->name('invoice.pay');
     Route::any('/invoice/callback', [\App\Http\Controllers\Panel\InvoiceController::class,'callback'])->name('invoice.callback');
@@ -79,16 +81,22 @@ Route::middleware('auth.admin')->group(function () {
 
     Route::get('/admin/orders', [OrdersController::class,'view'])->name('admin.orders');
     Route::get('/admin/order/{code}', [OrdersController::class,'project'])->name('admin.order');
+
     Route::post('/admin/order/attr/{id}', [OrdersController::class,'attrUpdate'])->name('admin.order.attr.edit');
     Route::delete('/admin/order/attr/{id}', [OrdersController::class,'attrDelete'])->name('admin.order.attr.delete');
     Route::post('/admin/order/attr', [OrdersController::class,'attrStore'])->name('admin.order.attr.store');
+
     Route::post('/admin/order/status', [OrdersController::class,'status'])->name('admin.order.status');
     Route::post('/admin/order/update', [OrdersController::class,'update'])->name('admin.order.update');
+
+    Route::post('/admin/order/setup', [OrdersController::class,'setup'])->name('admin.order.setup');
+    Route::post('/admin/order/start', [OrdersController::class,'start'])->name('admin.order.start');
+    Route::post('/admin/order/demo', [OrdersController::class,'sendDemo'])->name('admin.order.demo');
+    Route::post('/admin/order/finish', [OrdersController::class,'finish'])->name('admin.order.finish');
 
     Route::post('/admin/start/store', [OrdersController::class,'createStartAttrs'])->name('admin.start.store');
     Route::post('/admin/file/ok', [OrdersController::class,'changeStatusFile'])->name('admin.file.ok');
 
-    Route::post('/admin/check/store', [OrdersController::class,'createDemoAttrs'])->name('admin.demo.store');
 
 
 

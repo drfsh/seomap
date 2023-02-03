@@ -109,8 +109,24 @@
                                     <img src="/images/icons/receipt-2.svg" alt="">
                                     وضعیت سفارش:
                                   </span>
-                                <strong :class="{'c-gold':project.status===0,'c-red':project.status===1||project.status===3||project.status===5,'c-green':project.status===2,'s-finish':project.status===4,}">
+                                <strong :class="{'c-gold':project.status===0,'c-red':project.status===1,'c-green':(project.status===2||project.status===3||project.status===5||project.status===4),'s-finish':project.status===5,'s-cancel':project.status===-1}">
                                     &nbsp;{{ project.status_fa }}</strong>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="order-detail__item">
+                                <span v-if="project.status===0">
+                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
+                                    مبلغ اولیه:
+                                </span>
+                                <span v-else>
+                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
+                                    پرداخت نشده :
+                                </span>
+                                <strong v-if="project.paid!==0 && project.status===0" class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
+                                <strong v-else-if="project.status===0"> &nbsp; بدون پرداخت</strong>
+                                <strong v-else-if="project.status!==0 && project.fee-project.paid!==0 " class="text-green"> &nbsp; {{ separate(project.fee-project.paid) }} تومان </strong>
+                                <strong class="text-green" v-else-if="project.status!==0"> &nbsp;کامل پرداخت شده </strong>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -118,20 +134,10 @@
                                 <span>
                                     <img src="/images/icons/wallet-money2.svg" alt="">
                                     <span v-if="project.status===0 && project.service.form!==3">مبلغ اولیه:</span>
-                                    <span v-else>مبلغ نهایی:</span>
+                                    <span v-else>مبلغ کل سفارش:</span>
                                 </span>
                                 <strong v-if="project.fee!==0 && project.status!==0" class="text-green"> &nbsp; {{ separate(project.fee) }} تومان </strong>
                                 <strong v-else class="c-gold"> &nbsp; درحال برسی </strong>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="order-detail__item">
-                                <span>
-                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
-                                    مبلغ پرداخت شده:
-                                </span>
-                                <strong v-if="project.paid!==0" class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
-                                <strong v-else> &nbsp; بدون پرداخت</strong>
                             </div>
                         </div>
                     </div>
@@ -149,36 +155,17 @@
                     </p>
                     <p v-if="project.status===0 && project.service.form!==3">
                         <ic_info class="me-2 ms-1" style="width: 17px;color: #727272;"></ic_info>
-                        زمان پیاده سازی و مبلغ نهایی پس از برسی اعلام میشود!
+                        ما در حال برسی هستیم. زمان پیاده سازی و مبلغ نهایی پس از برسی اعلام میشود!
                     </p>
 
                 </div>
-                <div class="nav nav-tabs mt-3" id="nav-tab" role="tablist">
-                    <button class="nav-link position-relative" :class="{active:page===0}" @click="page=0">
-                        <ic_document_text></ic_document_text>
-                        توضیحات
-                    </button>
-                    <button class="nav-link position-relative" :class="{active:page===1}" @click="page=1">
-                        <ic_list_2></ic_list_2>
-                        مراحل روند پروژه
-                        <span  v-if="files!==0" class="count bg-blue" style="animation: pulse-primary 2s infinite;">{{files}}</span>
-                    </button>
-                    <button class="nav-link position-relative" :class="{active:page===2}" @click="page=2">
-                        <ic_tag></ic_tag>
-                        صورتحساب ها
-                        <span  v-if="dont_pay!==0" class="count bg-blue" style="animation: pulse-primary 2s infinite;">{{dont_pay}}</span>
-                    </button>
-                    <button v-if="attrs.startDate" class="nav-link position-relative" :class="{active:page===3}" @click="page=3">
-                        <ic_timer></ic_timer>
-                        مدت زمان
-                    </button>
-                </div>
+                <Route v-if="project.status>0" :page="page" :step="project.status"></Route>
 
                 <div v-if="page===0">
                     <OrderDescription :attrs="attrs" :project="project"></OrderDescription>
                 </div>
 
-                <div v-if="page===1">
+                <div v-if="page===1 || page===2">
                     <OrderAttrs :attrs="attrs" :project="project"></OrderAttrs>
                     <div class="infos">
                         <p v-if="project.status===0">
@@ -188,13 +175,9 @@
                     </div>
                 </div>
 
-                <div v-if="page===2">
-                    <OrderInvoices :invoices="project.invoices"></OrderInvoices>
-                </div>
-
-                <div ref="elTime" v-show="page===3">
-                    <OrderTime v-if="attrs.startDate" :project="project" :attrs="attrs"></OrderTime>
-                </div>
+                <OrderWorking :attrs="attrs" :project="project" v-if="page===3"></OrderWorking>
+                <OrderDemo :attrs="attrs" :project="project" v-if="page===4"></OrderDemo>
+                <OrderFinish :attrs="attrs" :project="project" v-if="page===5"></OrderFinish>
             </div>
         </div>
     </PanelLayout>
@@ -203,20 +186,17 @@
 <script setup>
 import tools from "@/Utils/tools";
 
-import Ic_list_2 from "@/Components/svgs/ic_list_2.vue";
-import Ic_tag from "@/Components/svgs/ic_tag.vue";
 import {onUnmounted, ref} from "vue";
-import Ic_document_text from "@/Components/svgs/ic_document_text.vue";
-import OrderAttrs from "@/Pages/Panel/Order/OrderAttrs.vue";
-import OrderInvoices from "@/Pages/Panel/Order/OrderInvoices.vue";
+import OrderAttrs from "@/Pages/Panel/Order/OrderStart.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import Ic_info from "@/Components/svgs/ic_info.vue";
 import Alert from "@/Components/Alert.vue";
 import OrderDescription from "@/Pages/Panel/Order/OrderDescription.vue";
-import OrderTime from "@/Pages/Panel/Order/OrderTime.vue";
-import Ic_timer from "@/Components/svgs/ic_timer.vue";
+import Route from "@/Components/Orders/Route.vue";
+import OrderWorking from "@/Pages/Panel/Order/OrderWorking.vue";
+import OrderDemo from "@/Pages/Panel/Order/OrderDemo.vue";
+import OrderFinish from "@/Pages/Panel/Order/OrderFinish.vue";
 
-const page = ref(0);
 const runningError = ref(null);
 const separate = (price) => {
     return tools.separate(price);
@@ -229,7 +209,7 @@ const prop = defineProps({
     session:String,
     invoice_id:Number
 })
-
+const page = ref(prop.project.status);
 if (prop.invoice_id)
     location.href = route('invoice.pay',{id:prop.invoice_id})
 
@@ -245,20 +225,19 @@ const fun = ()=>{
                 files.value++
         }
     }
-    runningError.value = null
-    if (prop.attrs.finish && prop.attrs.finish[0].name==null && prop.attrs.finish[0].description==null){
-        runningError.value = "پروژه به پایان رسید از بخش \"مراحل روند پروژه\" بررسی و تایید کنید."
-    }
-    if (prop.attrs.demoTest && prop.attrs.demoTest[0].name==null && prop.attrs.demoTest[0].description==null){
-        runningError.value = "لطفا از بخش \"مراحل روند پروژه > مرحله تست\" , دمو را مشاهده و تایید کنید."
+
+    let filesError = 0;
+    if (prop.attrs.startAttrs){
+        const data = prop.attrs.startAttrs
+        for (const i in data) {
+            if (data[i].value2!=null && data[i].value2!=1)
+                filesError++
+        }
     }
 
-    if (prop.attrs.demoCheck && prop.attrs.demoCheck[0].name==null && prop.attrs.demoCheck[0].description==null){
-        runningError.value = "لطفا از بخش \"مراحل روند پروژه > مرحله برسی\" , دمو را مشاهده و تایید کنید."
-    }
 
-    if (files.value>0){
-        runningError.value = files.value+" عدد از اطلاعات خواسته شده را ارسال نکرده اید. از تب \"مراحل روند پروژه\" اطلاعات را ارسال کنید."
+    if (filesError>0){
+        runningError.value = filesError+" مورد از فایل های شما در بخش \"اطلاعات درخواستی\" تایید نشده است لطفا آن ها را اصلاح کنید. "
     }
 }
 fun()

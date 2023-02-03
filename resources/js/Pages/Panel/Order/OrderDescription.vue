@@ -18,27 +18,34 @@
         </div>
         <div v-if="project.access">
             <div class="min-title">دسترسی ها</div>
-            <div class="order-detail mt-3">
-                <div style="height: 24px;">
-                    هاست :
-                    <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="order-detail mt-3">
+                        <div style="height: 24px;">
+                            هاست :
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
                                  username:   {{ project.access.host_username }}
                             </span>
-                    <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
                                  password:   {{ project.access.host_password }}
                             </span>
+                        </div>
+                    </div>
                 </div>
-            </div>    <div class="order-detail mt-3">
-            <div style="height: 24px;">
-                سایت :
-                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
+                <div class="col-md-6">
+                    <div class=" order-detail mt-3">
+                        <div style="height: 24px;">
+                            سایت :
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
                                  username:   {{ project.access.web_username }}
                             </span>
-                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
                                  password:   {{ project.access.web_password }}
                             </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
         <div v-if="project.file">
             <div class="min-title">فایل پیوست</div>

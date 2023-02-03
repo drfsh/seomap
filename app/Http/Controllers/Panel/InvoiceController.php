@@ -52,10 +52,20 @@ class InvoiceController extends Controller
             $invoice->pay_date = Carbon::now();
             $invoice->save();
             $project = $invoice->project;
-            if ($invoice->data==1)
+            if ($invoice->data)
             {
-                $project->status = 2;
-                $project->save();
+                if ($invoice->data!=5){
+                    $project->status = $invoice->data;
+                    $project->save();
+                }else{
+                    foreach ($project->attrs as $attr) {
+                        if ($attr->type == 'demo') {
+                            $attr->value1 = 1;
+                            $attr->save();
+                            break;
+                        }
+                    }
+                }
             }
             session(['status'=>'با موفقیت پرداخت شد']);
             return redirect(route('order',['code'=>$project->code]));

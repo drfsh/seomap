@@ -282,7 +282,7 @@ input[type=number] {
     font-weight: 500;
 }
 
-.s-finish {
+.s-finish,.s-cancel {
     background: #2f5bea;
     color: white;
     border-radius: 14px;
@@ -290,7 +290,9 @@ input[type=number] {
     font-size: 14px;
     padding: 2px 7px 0;
 }
-
+.s-cancel{
+    background: red;
+}
 .infos p {
     margin-top: 16px;
     margin-right: 9px;
@@ -380,6 +382,7 @@ td.error:before {
 .vue-tags-input {
     padding: 0 !important;
     width: 100%!important;
+    max-width: 100%!important;
 }
 
 .ti-autocomplete {
@@ -492,7 +495,7 @@ td.error:before {
     width: 3px;
     position: absolute;
     top: 0;
-    right: calc(var(--p) - 10px);
+    right: calc(var(--p) - -3px);
     background: #ffeb3b;
     height: 100%;
 }
@@ -598,4 +601,91 @@ svg.st-blue path {
 }
 svg.st-red path {
     stroke: red;
+}
+.edit-btn{
+    width: 22px;margin: 0px 9px;opacity: .5;
+}
+.price-edit{
+    background: #2f5bea;
+    border: none;
+    color: white;
+    padding: 10px 5px;
+    width: 138px;
+    text-align: center;
+    border-radius: 10px;
+    margin-right: 9px;
+}
+.bg-bg{
+    color: unset;
+    background: #f6f6f6;
+}
+.bg-green{
+    background: #43a047;
+}
+.route {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+.route .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+    color: #e2e3e5;
+    position: relative;
+}
+.route .line {
+    position: relative;
+    width: 28%;
+    height: 5px;
+    background: #e2e3e5;
+    overflow: hidden;
+}
+.route .line .bg {
+    transition: 0.5s;
+    background: $main-color;
+    height: 100%;
+    width: 0%;
+    position: absolute;
+}
+.route .item svg {
+    width: 30px;
+    height: 30px;
+    color: #d2d2d2;
+}
+.route .item svg path{
+    stroke: #9b9b9b;
+}
+.route .item span {
+    font-size: 12px;
+    margin-top: 10px;
+    color: #999;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+.route .item.active span {
+    color: white;
+    text-align: center;
+}
+.route .item.active svg path{
+    stroke: white;
+}
+.route .item.active{
+    background: #2f5bea;
+    padding: 10px;
+    border-radius: 16px;
+    min-width: 77px;
+}
+.route .item.select:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 7px;
+    border-radius: 100px;
+    height: 7px;
+    background: #2f5bea;
+    bottom: -13px;
 }

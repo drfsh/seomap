@@ -63,4 +63,17 @@
     .content__card__head a{
         margin-top: 20px;
     }
+    .route .item{
+        padding: 10px;
+        min-width: 49px!important;
+        height: 20px;
+        border-right: 6px;
+    }
+    .route .item span{
+        font-size: 8px;
+        margin-top: -3px;
+    }
+    .route .item svg {
+        display: none;
+    }
 }

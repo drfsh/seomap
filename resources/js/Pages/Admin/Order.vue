@@ -42,10 +42,6 @@
                         <ic_settings></ic_settings>
                         تنظیمات
                     </button>
-                    <button v-if="attrs.startDate" class="nav-link position-relative" :class="{active:page===4}" @click="page=4">
-                        <ic_timer></ic_timer>
-                        مدت زمان
-                    </button>
                 </div>
 
                 <div ref="elDescription" v-show="page===0" >
@@ -59,9 +55,6 @@
                 </div>
                 <div ref="elSettings" v-show="page===3">
                     <OrderSettings :project="project"></OrderSettings>
-                </div>
-                <div ref="elTime" v-show="page===4">
-                    <OrderTime v-if="attrs.startDate" :project="project" :attrs="attrs"></OrderTime>
                 </div>
             </div>
         </div>
@@ -80,10 +73,8 @@ import OrderInvoices from "@/Pages/Admin/Order/OrderInvoices.vue";
 import OrderSettings from "@/Pages/Admin/Order/OrderSettings.vue";
 import OrderDescription from "@/Pages/Admin/Order/OrderDescription.vue";
 import Ic_timer from "@/Components/svgs/ic_timer.vue";
-import OrderTime from "@/Pages/Admin/Order/OrderTime.vue";
 import Ic_settings from "@/Components/svgs/ic_settings.vue";
 
-const page = ref(0);
 
 const prop = defineProps({
     project: Object,
@@ -91,6 +82,7 @@ const prop = defineProps({
     dont_pay: Number
 })
 
+const page = ref(prop.project.status!==0?1:0);
 const elDescription = ref(null)
 const elAttrs = ref(null)
 const elInvoices = ref(null)

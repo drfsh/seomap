@@ -67,7 +67,11 @@
                                         <td data-label="نوع خدمات">{{v.service.name}}</td>
                                         <td v-if="v.fee!==0">{{ separate(v.fee) }} تومان</td>
                                         <td v-else>درحال برسی</td>
-                                        <td data-label="وضعیت"  :class="{'c-gold':v.status===0,'c-red':v.status===1||v.status===3||v.status===5,'c-green':v.status===2,'s-finish':v.status===4,}">{{ v.status_fa }}</td>
+                                        <td data-label="وضعیت" >
+                                            <span :class="{'c-gold':v.status===0,'c-red':v.status===1,'c-green':(v.status===2||v.status===3||v.status===5||v.status===4),'s-finish':v.status===5,'s-cancel':v.status===-1}">
+                                                {{ v.status_fa }}
+                                            </span>
+                                        </td>
                                         <td data-label="جزییات">
                                             <Link :href="route('admin.order',{code:v.code})">مشاهده</Link>
                                         </td>

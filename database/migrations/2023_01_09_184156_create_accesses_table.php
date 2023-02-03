@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('accesses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
-            $table->string('url');
+            $table->string('web');
             $table->string('web_username')->nullable();
             $table->string('web_password')->nullable();
+            $table->string('host');
             $table->string('host_username')->nullable();
             $table->string('host_password')->nullable();
             $table->timestamps();

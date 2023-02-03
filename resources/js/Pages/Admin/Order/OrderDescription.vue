@@ -84,9 +84,24 @@
                                     <img src="/images/icons/receipt-2.svg" alt="">
                                     وضعیت سفارش:
                                   </span>
-                    <strong
-                        :class="{'c-gold':project.status===0,'c-red':project.status===1||project.status===3||project.status===6||project.status===5,'c-green':project.status===2,'s-finish':project.status===4,}">
+                    <strong :class="{'c-gold':project.status===0,'c-red':project.status===1,'c-green':(project.status===2||project.status===3||project.status===5||project.status===4),'s-finish':project.status===5,'s-cancel':project.status===-1}">
                         &nbsp;{{ project.status_fa }}</strong>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="order-detail__item">
+                                <span v-if="project.status===0">
+                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
+                                    مبلغ اولیه:
+                                </span>
+                    <span v-else>
+                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
+                                    پرداخت نشده :
+                                </span>
+                    <strong v-if="project.paid!==0 && project.status===0" class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
+                    <strong v-else-if="project.status===0"> &nbsp; بدون پرداخت</strong>
+                    <strong v-else-if="project.status!==0 && project.fee-project.paid!==0 " class="text-green"> &nbsp; {{ separate(project.fee-project.paid) }} تومان </strong>
+                    <strong class="text-green" v-else-if="project.status!==0"> &nbsp;کامل پرداخت شده </strong>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -99,15 +114,6 @@
                     <strong v-if="project.fee!==0" class="text-green"> &nbsp; {{ separate(project.fee) }}
                         تومان </strong>
                     <strong v-else class="text-green"> &nbsp; درحال برسی </strong>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="order-detail__item">
-                                <span>
-                                    <img src="/images/icons/wallet-money-primary.svg" alt="">
-                                    مبلغ پرداخت شده:
-                                </span>
-                    <strong class="text-green"> &nbsp; {{ separate(project.paid) }} تومان </strong>
                 </div>
             </div>
         </div>
@@ -132,27 +138,34 @@
         </div>
         <div v-if="project.access">
             <div class="min-title">دسترسی ها</div>
-            <div class="order-detail mt-3">
-                <div style="height: 24px;">
-                    هاست :
-                    <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="order-detail mt-3">
+                        <div style="height: 24px;">
+                            هاست :
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
                                  username:   {{ project.access.host_username }}
                             </span>
-                    <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
                                  password:   {{ project.access.host_password }}
                             </span>
+                        </div>
+                    </div>
                 </div>
-            </div>    <div class="order-detail mt-3">
-            <div style="height: 24px;">
-                سایت :
-                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
+                <div class="col-md-6">
+                    <div class=" order-detail mt-3">
+                        <div style="height: 24px;">
+                            سایت :
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue">
                                  username:   {{ project.access.web_username }}
                             </span>
-                <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
+                            <span style="border-radius: 11px;padding: 0 9px;" class="order-info float-start bg-blue ms-2">
                                  password:   {{ project.access.web_password }}
                             </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
         <div v-if="project.file">
             <div class="min-title">فایل پیوست</div>

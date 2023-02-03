@@ -1,11 +1,4 @@
 <template>
-    <div class="min-title">وضعیت</div>
-    <div class="table-container mt-3">
-        <div class="attrs justify-content-around">
-            <button @click="changeStatus(v.key)" class="btn btn--primary" :class="{'outline':v.key!==project.status}" v-for="(v,i) in status">{{v.text}}</button>
-        </div>
-    </div>
-
     <form class="mt-4 p-2 mb-2" @submit.prevent="submit">
         <div class="row gy-4">
 

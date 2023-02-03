@@ -26,27 +26,27 @@ class OrderController extends Controller
 
     public function list(Request $request)
     {
-        $code = (int) $request->code;
+        $code = (int)$request->code;
         $id = auth()->id();
 
         if (!$code)
-            return Inertia::render('Panel/Orders',[
-                'projects'=>Project::where('user_id',$id)->orderBy('created_at','desc')->orderBy('status','desc')->with('service')->paginate(10),
-                'pOk'=>Project::where([['status',4],['user_id',$id]])->orderBy('created_at','desc')->with('service')->paginate(10),
-                'pCancel'=>Project::where([['status',5],['user_id',$id]])->orderBy('created_at','desc')->with('service')->paginate(10),
+            return Inertia::render('Panel/Orders', [
+                'projects' => Project::where('user_id', $id)->orderBy('created_at', 'desc')->orderBy('status', 'desc')->with('service')->paginate(10),
+                'pOk' => Project::where([['status', 4], ['user_id', $id]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pCancel' => Project::where([['status', 5], ['user_id', $id]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
             ]);
-        else{
+        else {
             //searching by code
-            return Inertia::render('Panel/Orders',[
-                'projects'=>Project::where([['id',$code-3500],['user_id',$id]])->orderBy('created_at','desc')->orderBy('status','desc')->with('service')->paginate(10),
-                'pOk'=>Project::where([['status',4],['id',$code-3500],['user_id',$id]])->orderBy('created_at','desc')->with('service')->paginate(10),
-                'pCancel'=>Project::where([['status',5],['id',$code-3500],['user_id',$id]])->orderBy('created_at','desc')->with('service')->paginate(10),
-                'code'=>$code
+            return Inertia::render('Panel/Orders', [
+                'projects' => Project::where([['id', $code - 3500], ['user_id', $id]])->orderBy('created_at', 'desc')->orderBy('status', 'desc')->with('service')->paginate(10),
+                'pOk' => Project::where([['status', 4], ['id', $code - 3500], ['user_id', $id]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'pCancel' => Project::where([['status', 5], ['id', $code - 3500], ['user_id', $id]])->orderBy('created_at', 'desc')->with('service')->paginate(10),
+                'code' => $code
             ]);
         }
     }
 
-    public function create($slug,Request $request)
+    public function create($slug, Request $request)
     {
         $service = Service::where('slug', $slug)->first();
         if (!$service) abort(404);
@@ -55,37 +55,39 @@ class OrderController extends Controller
             case 0:
             {
                 $plans = $service->plans;
-                $p =[];
+                $p = [];
                 foreach ($plans as $plan)
                     $p[$plan->id] = $plan->name;
                 return Inertia::render('Panel/ServicesForm/FormWebNew', [
                     'service' => $service,
                     'type' => $service->sTypes(),
                     'platform' => $service->sPlatforms(),
-                    'plan_id'=> $request->plan,
-                    'plan'=> $p,
+                    'plan_id' => $request->plan,
+                    'plan' => $p,
                 ]);
             }
-            case 2:{
-                $services = Service::where('form',2)->get();
-                $p =[];
+            case 2:
+            {
+                $services = Service::where('form', 2)->get();
+                $p = [];
                 foreach ($services as $plan)
                     $p[$plan->id] = $plan->name;
                 return Inertia::render('Panel/ServicesForm/FormDev', [
                     'service' => $service,
-                    'plan_id'=> 1,
-                    'services'=> $p,
+                    'plan_id' => 1,
+                    'services' => $p,
                 ]);
             }
-            case 3:{
+            case 3:
+            {
                 $plans = $service->plans;
-                $p =[];
+                $p = [];
                 foreach ($plans as $plan)
-                    $p[$plan->id] = ' پشتیبانی '.$plan->name;
+                    $p[$plan->id] = ' پشتیبانی ' . $plan->name;
                 return Inertia::render('Panel/ServicesForm/FormSupport', [
                     'service' => $service,
-                    'plans'=> $p,
-                    'plansa'=> $plans,
+                    'plans' => $p,
+                    'plansa' => $plans,
                 ]);
             }
             default:
@@ -109,7 +111,8 @@ class OrderController extends Controller
         }
     }
 
-    private function newWeb($request){
+    private function newWeb($request)
+    {
 
         $request->validate([
             'name' => 'required',
@@ -129,7 +132,7 @@ class OrderController extends Controller
         $project->plan_id = $request->plan;
         $project->description = $request->description;
         $project->fee = 2000000;
-        if ($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $path = $this->upload($request->file('file'));
             $project->file = $path;
         }
@@ -144,32 +147,34 @@ class OrderController extends Controller
         $attrNew->platform_id = $request->platform;
         $attrNew->save();
 
-        foreach($request->attrs as $attr){
+        foreach ($request->attrs as $attr) {
             Attribute::create([
-                'project_id'=>$project->id,
-                'description'=>$attr,
-                'name'=>'-',
-                'value'=>'-',
-                'type'=>'attr',
+                'project_id' => $project->id,
+                'description' => $attr,
+                'name' => '-',
+                'value' => '-',
+                'type' => 'attr',
             ]);
         }
         Attribute::create([
-            'project_id'=>$project->id,
-            'description'=>$request->lang,
-            'name'=>'زبان ها',
-            'value'=>'-',
-            'type'=>'lang',
+            'project_id' => $project->id,
+            'description' => $request->lang,
+            'name' => 'زبان ها',
+            'value' => '-',
+            'type' => 'lang',
         ]);
         $invoice = Invoice::create([
-            'info'=>'پیش پرداخت اولیه',
-            'amount'=>1000000,//1,000,000 toman
-            'project_id'=>$project->id,
-            'data'=>0
+            'info' => 'پیش پرداخت اولیه',
+            'amount' => 1000000,//1,000,000 toman
+            'project_id' => $project->id,
+            'data' => 0
         ]);
-        session(['invoice_id'=>$invoice->id]);
-        return redirect(route('order',['code'=>$project->code]));
+        session(['invoice_id' => $invoice->id]);
+        return redirect(route('order', ['code' => $project->code]));
     }
-    private function newDev($request){
+
+    private function newDev($request)
+    {
 
         $request->validate([
             'service' => 'required',
@@ -185,15 +190,17 @@ class OrderController extends Controller
         $project->description = $request->description;
         $project->fee = 0;
         $project->title = $request->title;
-        if ($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $path = $this->upload($request->file('file'));
             $project->file = $path;
         }
         $project->save();
 
-        return redirect(route('order',['code'=>$project->code]));
+        return redirect(route('order', ['code' => $project->code]));
     }
-    private function newSupport($request){
+
+    private function newSupport($request)
+    {
 
         $request->validate([
             'service' => 'required',
@@ -213,7 +220,7 @@ class OrderController extends Controller
         $project->description = $request->description;
         $project->fee = $plan->fee;
         $project->title = $request->title;
-        if ($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $path = $this->upload($request->file('file'));
             $project->file = $path;
         }
@@ -228,13 +235,14 @@ class OrderController extends Controller
         $access->host_password = $request->host_pass;
         $access->save();
 
-        return redirect(route('order',['code'=>$project->code]));
+        return redirect(route('order', ['code' => $project->code]));
     }
 
 
-    public function project($code){
-        $code = (int) $code;
-        $project = Project::where([['id',$code-3500],['user_id',auth()->id()]])->with(['user','attr_new','ticket','invoices','plan','service','access'])->first();
+    public function project($code)
+    {
+        $code = (int)$code;
+        $project = Project::where([['id', $code - 3500], ['user_id', auth()->id()]])->with(['user', 'attr_new', 'ticket', 'invoices', 'plan', 'service', 'access'])->first();
 //        return $this->sendTrue($project,[]);
         if (!$project) abort(404);
         $attrsOne = $project->attrs;
@@ -242,47 +250,46 @@ class OrderController extends Controller
         $i = $project->invoices;
         $dontPay = 0;
         $pay = 0;
-        foreach ($i as $v)
-        {
-            if ($v->status!=1)
-            {
+        foreach ($i as $v) {
+            if ($v->status != 1) {
                 $pay = $v->id;
                 $dontPay++;
             }
         }
-        foreach ($attrsOne as $attr){
+        foreach ($attrsOne as $attr) {
             $attrs[$attr->type][] = $attr;
         }
 
-        $status=session('status');
+        $status = session('status');
         if ($status)
-            session(['status'=>null]);
+            session(['status' => null]);
 
-        $invoice_id=session('invoice_id');
+        $invoice_id = session('invoice_id');
         if ($invoice_id)
-            session(['invoice_id'=>null]);
+            session(['invoice_id' => null]);
 
-        return Inertia::render('Panel/Order',[
-            'project'=>$project,
-            'attrs'=>$attrs,
-            'dont_pay'=>$dontPay,
-            'pay'=>$pay,
+        return Inertia::render('Panel/Order', [
+            'project' => $project,
+            'attrs' => $attrs,
+            'dont_pay' => $dontPay,
+            'pay' => $pay,
             'session' => $status,
-            'invoice_id'=>$invoice_id
+            'invoice_id' => $invoice_id
         ]);
     }
 
-    public function uploadAttrs(Request $request){
+    public function uploadAttrs(Request $request)
+    {
 
         $id = $request->attr_id;
         $info = $request->info;
 
         $attr = Attribute::find($id);
-        if (!$attr || $attr->project->user_id!=auth()->id())
+        if (!$attr || $attr->project->user_id != auth()->id())
             return abort(404);
 
 
-        if ($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $path = $this->upload($request->file('file'));
             $attr->value = $path;
         }
@@ -290,22 +297,86 @@ class OrderController extends Controller
         $attr->value2 = null;
         $attr->save();
 
-        return redirect(route('order',['code'=>$attr->project->code]));
+        return redirect(route('order', ['code' => $attr->project->code]));
     }
 
-    public function demoChecked(Request $request){
+    public function demoChecked(Request $request)
+    {
 
         $id = $request->attr_id;
         $info = $request->info;
 
         $attr = Attribute::find($id);
-        if (!$attr || $attr->project->user_id!=auth()->id())
+        if (!$attr || $attr->project->user_id != auth()->id())
             return abort(404);
 
         $attr->name = $info;
         $attr->save();
 
-        return redirect(route('order',['code'=>$attr->project->code]));
+        return redirect(route('order', ['code' => $attr->project->code]));
     }
 
+    public function start($id)
+    {
+        $project = Project::find($id);
+        if (!$project) abort(404);
+        if ($project->status > 1) abort(404);
+
+        $invoice1 = Invoice::where([['data', '0'], ['project_id', $id], ['status', '1']])->first();
+        $invoice2 = Invoice::where([['data', '2'], ['project_id', $id]])->first();
+        if ($invoice2 && $invoice2->status == 1) abort(404);
+
+        $onePrice = $invoice1 ? $invoice1->amount : 0;
+
+        $amount = ($project->fee - $onePrice) / 100 * 60;
+
+        if ($invoice2) {
+            $invoice2->update([
+                'amount' => $amount,
+            ]);
+        } else {
+            $invoice2 = Invoice::create([
+                'info' => 'قسط اول',
+                'amount' => $amount,
+                'project_id' => $id,
+                'data' => 2
+            ]);
+        }
+
+        return redirect(route('invoice.pay', ['id' => $invoice2->id]));
+    }
+
+    public function finish($id)
+    {
+        $project = Project::find($id);
+        if (!$project) abort(404);
+        if ($project->status > 4) abort(404);
+
+        $invoice = $project->invoices;
+
+        $onePrice = 0;
+        foreach ($invoice as $v) {
+            if ($v->status == 1)
+                $onePrice += $v->amount;
+        }
+
+
+        $amount = $project->fee - $onePrice;
+
+        if ($amount==0)
+        {
+            $project->status = 5;
+            $project->save();
+            return redirect(route('order', ['code' => $project->code]));
+        }
+
+        $invoice2 = Invoice::create([
+            'info' => " قسط " . sizeof($invoice) ,
+            'amount' => $amount,
+            'project_id' => $id,
+            'data' => 5
+        ]);
+
+        return redirect(route('invoice.pay', ['id' => $invoice2->id]));
+    }
 }
