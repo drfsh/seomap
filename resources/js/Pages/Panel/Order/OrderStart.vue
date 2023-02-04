@@ -1,5 +1,5 @@
 <template>
-    <div v-if="project.status===1" class="position-relative">
+    <div class="position-relative">
         <span class="data-left" style="right: unset; left: 17px; top: -1px;">
                     {{attrs.startInfo[0].created_at_fa}}
         </span>
@@ -7,13 +7,6 @@
         <div class="order-detail mt-3 order-info" v-html="prop.attrs.setupDescription[0].description"></div>
     </div>
     <OrderAttrsFiles  :project="project" :attrs="attrs"></OrderAttrsFiles>
-    <div v-if="project.status>=1" class="position-relative">
-        <span class="data-left" style="right: unset; left: 17px; top: -1px;">
-                    {{attrs.startInfo[0].created_at_fa}}
-        </span>
-        <div class="min-title">توضیحات کارشناس فنی</div>
-        <div class="order-detail mt-3 order-info" v-html="prop.attrs.setupDescription[0].description"></div>
-    </div>
     <div>
         <div class="min-title">اطلاعات پروژه و هزینه پیاده سازی</div>
         <div class="order-detail mt-3">

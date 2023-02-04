@@ -131,7 +131,7 @@ class OrderController extends Controller
         $project->service_id = $request->service;
         $project->plan_id = $request->plan;
         $project->description = $request->description;
-        $project->fee = 2000000;
+        $project->fee = 1000000;
         if ($request->hasFile('file')) {
             $path = $this->upload($request->file('file'));
             $project->file = $path;

@@ -31,6 +31,7 @@ const sendFile = async () => {
             form.file=null
             form.info=null
             edit.value = false
+            textFile.value = '';
             emit('update:visible', false)
         }
     })

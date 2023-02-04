@@ -13,11 +13,11 @@ class NotificationController extends Controller
     public function list(){
         $this->seen();
         return Inertia::render('Panel/Notifications',[
-            'notifications'=>Notification::orderBy('created_at','desc')->paginate(10)
+            'notifications'=>Notification::where('for_user_id',null)->orWhere('for_user_id',auth()->id())->orderBy('created_at','desc')->paginate(10)
         ]);
     }
     public function view($id){
-        $not = Notification::find($id);
+        $not = Notification::where([['for_user_id',null],['id',$id]])->orWhere([['for_user_id',auth()->id()],['id',$id]])->first();
         if (!$not) abort(404);
         return Inertia::render('Panel/Notification',[
             'notification'=>$not

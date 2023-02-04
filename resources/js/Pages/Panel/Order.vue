@@ -13,13 +13,17 @@
                        class="btn btn--primary ms-2">
                          پرداخت صورت حساب جاری
                     </a>
-                    <a v-if="project.ticket" target="_blank" :href="route('ticket.view',{code:project.ticket.code})"
+                    <a v-if="project.ticket && project.status>1" target="_blank" :href="route('ticket.view',{code:project.ticket.code})"
                        class="btn btn--outline-primary ms-2">
                         تیکت
                     </a>
-                    <a v-else target="_blank" :href="route('ticket.create',{project:project.id})"
+                    <a v-else-if="project.status>1" target="_blank" :href="route('ticket.create',{project:project.id})"
                        class="btn btn--outline-primary ms-2">
                         ایجاد تیکت
+                    </a>
+                    <a :href="route('orders.list')"
+                       class="btn btn--outline-primary ms-2">
+                        بازگشت
                     </a>
                 </div>
             </div>
@@ -100,6 +104,9 @@
                                 <strong> &nbsp; {{ project.access.url }}</strong>
                             </div>
                         </div>
+
+
+
                     </div>
                     <hr>
                     <div class="row">
@@ -134,13 +141,57 @@
                                 <span>
                                     <img src="/images/icons/wallet-money2.svg" alt="">
                                     <span v-if="project.status===0 && project.service.form!==3">مبلغ اولیه:</span>
-                                    <span v-else>مبلغ کل سفارش:</span>
+                                    <span v-else>مبلغ پروژه:</span>
                                 </span>
                                 <strong v-if="project.fee!==0 && project.status!==0" class="text-green"> &nbsp; {{ separate(project.fee) }} تومان </strong>
                                 <strong v-else class="c-gold"> &nbsp; درحال برسی </strong>
                             </div>
                         </div>
                     </div>
+
+                    <div v-if="p!=null && project.status===3" class="p-3 mt-3">
+                        <div class="deadline">
+            <span class="right">
+                {{ dataFormat(start, 'DD MMMM') }}
+            </span>
+                            <div class="line" :style="{'--p':p+'%'}">
+                <span v-if="n>0" class="title">
+                    {{ n + ' روز مانده ' }}
+                </span>
+                                <span v-else class="title">
+                    روز آحر
+                </span>
+                                <span v-if="getAttrs!=null" class="get-attrs" :style="{'--p':getAttrs.p+'%'}">
+
+                </span>
+                                <span v-if="demoCheck!=null" class="get-attrs" :style="{'--p':demoCheck.p+'%'}" style="background: #24fc14">
+
+                </span>
+                                <span v-if="demoTest!=null" class="get-attrs" :style="{'--p':demoTest.p+'%'}" style="    right: calc(var(--p) - 7px);background: #0dcaf0">
+
+                </span>
+                            </div>
+                            <span class="left">
+                {{ dataFormat(end, 'DD MMMM') }}
+            </span>
+                        </div>
+                        <div class="color-type">
+                            <div v-if="getAttrs">دریافت اطلاعات سایت: {{dataFormat(getAttrs.date, 'DD MMMM')}}</div>
+                            <div v-if="demoCheck">بررسی سایت: {{dataFormat(demoCheck.date, 'DD MMMM')}}</div>
+                            <div v-if="demoTest">تست نهایی سایت: {{dataFormat(demoTest.date, 'DD MMMM')}}</div>
+                        </div>
+                        <div v-if="attrs.pMessage">
+                            <div>
+                                <div class="min-title">پیام ها</div>
+
+                                <div v-for="v in attrs.pMessage" class="row m-0  py-4 mt-4 px-4 order-detail position-relative">
+                                    <span class="data-left">{{ v.created_at_fa }}</span>
+                                    {{ v.description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="infos">
                     <p v-if="dont_pay>0" style="color: red;">
@@ -196,6 +247,7 @@ import Route from "@/Components/Orders/Route.vue";
 import OrderWorking from "@/Pages/Panel/Order/OrderWorking.vue";
 import OrderDemo from "@/Pages/Panel/Order/OrderDemo.vue";
 import OrderFinish from "@/Pages/Panel/Order/OrderFinish.vue";
+import moment from "jalali-moment";
 
 const runningError = ref(null);
 const separate = (price) => {
@@ -216,7 +268,7 @@ if (prop.invoice_id)
 const files = ref(0)
 
 
-const fun = ()=>{
+const fun1 = ()=>{
     files.value = 0
     if (prop.attrs.startAttrs){
         const data = prop.attrs.startAttrs
@@ -240,9 +292,82 @@ const fun = ()=>{
         runningError.value = filesError+" مورد از فایل های شما در بخش \"اطلاعات درخواستی\" تایید نشده است لطفا آن ها را اصلاح کنید. "
     }
 }
-fun()
-const timer = setInterval(fun,1000)
+fun1()
+const timer1 = setInterval(fun1,1000)
 onUnmounted(()=>{
-    clearInterval(timer)
+    clearInterval(timer1)
 })
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+let start ,end, today;
+const n = ref(null)
+const p = ref(null)
+const getAttrs = ref(null)
+const demoCheck = ref(null)
+const demoTest = ref(null)
+if (prop.project.status===3){
+
+    const fu = () => {
+        const attrs = prop.attrs.startDate
+
+        start = new Date(attrs[0].created_at)
+        end = addDays(start, prop.project.days)
+        today = new Date();
+
+        if (prop.attrs.demoCheck) {
+            const date = new Date(new Date(prop.attrs.demoCheck[0].updated_at))
+            demoCheck.value = {
+                date: date,
+                p: Math.round(((date - start) / (end - start)) * 100)
+            }
+        }
+        else {
+            demoCheck.value = null
+        }
+
+        if (prop.attrs.demoTest) {
+            const date = new Date(new Date(prop.attrs.demoTest[0].updated_at))
+            demoTest.value = {
+                date: date,
+                p: Math.round(((date - start) / (end - start)) * 100)
+            }
+        }
+        else {
+            demoCheck.value = null
+        }
+        getAttrs.value = null
+        const startAttr = prop.attrs.startAttrs
+        for (const i in startAttr) {
+            if (startAttr[i].value!=null||startAttr[i].description!=null){
+                const date = new Date(new Date(startAttr[i].updated_at))
+                getAttrs.value = {
+                    date:date,
+                    p:Math.round(((date - start) / (end - start)) * 100)
+                }
+            }
+        }
+
+        n.value = (Math.round((end - today) / 1000 / 60 / 60 / 24))
+        p.value = Math.round(((today - start) / (end - start)) * 100)
+        if (p.value>100)
+            p.value=100
+    }
+    fu()
+    const timer = setInterval(()=>{
+        fu()
+    },1000)
+    onUnmounted(()=>{
+        clearInterval(timer)
+    })
+
+}
+const dataFormat = (date, format) => {
+    return moment(date, 'YYYY-MM-DDTH:mm:ss.000000Z').locale('fa').format(format)
+}
+
 </script>

@@ -50,6 +50,7 @@
         <div v-if="project.file">
             <div class="min-title">فایل پیوست</div>
             <div class="order-detail mt-3">
+                <ic_link class="ms-2"></ic_link>
                 <a target="_blank" :href="project.file" class="order-info">
                     بازکردن فایل
                 </a>
@@ -78,6 +79,7 @@
 
 <script setup>
 import Ic_tick_blue from "@/Components/svgs/ic_tick_blue.vue";
+import Ic_link from "@/Components/svgs/ic_link.vue";
 
 defineProps(['project','attrs'])
 </script>

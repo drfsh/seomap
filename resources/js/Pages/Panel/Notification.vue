@@ -12,9 +12,7 @@
             </div>
             <div class="content__card__body">
                 <div class="notification__detail">
-                    <p>
-                        {{ notification.body }}
-                    </p>
+                    <div v-html="notification.body"></div>
                     <p>
                         <strong>دوست دار شما - {{ notification.user }}</strong>
                     </p>

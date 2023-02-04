@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Access;
 use App\Models\Attribute;
 use App\Models\Invoice;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\User;
 use App\Traits\Smstrait;
@@ -275,6 +276,19 @@ class OrdersController extends Controller
             $description->save();
         }
 
+        $link = route('order',['code'=>$project->code]);
+        $body = " با سلام \n {$project->user->name} عزیز وضعیت پروژه شما به <span class='c-green'>دریافت اطلاعات</span> تغییر کرد.لطفا نسبت به تکمیل اطلاعات و پرداخت اقدام نمایید
+ <div class='mt-3 text-start'><a href='$link' style='padding: 11px 18px;' class='me-2 btn btn--primary outline'>مشاهده پروژه</a></div>
+ ";
+        Notification::create([
+            'user_id'=>auth()->id(),
+            'for_user_id'=>$project->user_id,
+            'for_id'=>$project->id,
+            'data'=>$project->code,
+            'title'=>'تغییر وضعیت پروژه شما',
+            'body'=>$body,
+            'icon'=>'monitor',
+        ]);
         return redirect(route('admin.order', ['code' => $project->code]));
     }
     public function start(Request $request){
@@ -325,6 +339,20 @@ class OrdersController extends Controller
             ]);
         }
 
+
+        $link = route('order',['code'=>$project->code]);
+        $body = " با سلام \n {$project->user->name} عزیز وضعیت پروژه شما به <span class='c-green'>درحال انجام</span> تغییر کرد.
+ <div class='mt-3 text-start'><a href='$link' style='padding: 11px 18px;' class='me-2 btn btn--primary outline'>مشاهده پروژه</a></div>
+ ";
+        Notification::create([
+            'user_id'=>auth()->id(),
+            'for_user_id'=>$project->user_id,
+            'for_id'=>$project->id,
+            'data'=>$project->code,
+            'title'=>'تغییر وضعیت پروژه شما',
+            'body'=>$body,
+            'icon'=>'monitor',
+        ]);
         return redirect(route('admin.order', ['code' => $project->code]));
     }
 
@@ -362,6 +390,20 @@ class OrdersController extends Controller
             $haInfo->save();
         }
 
+
+        $link = route('order',['code'=>$p->code]);
+        $body = " با سلام \n {$p->user->name} عزیز وضعیت پروژه شما به <span class='c-green'>ارسال دمو</span> تغییر کرد.لطفا نسبت به چک دمو پروژه اقدام نمایید
+ <div class='mt-3 text-start'><a href='$link' style='padding: 11px 18px;' class='me-2 btn btn--primary outline'>مشاهده پروژه</a></div>
+ ";
+        Notification::create([
+            'user_id'=>auth()->id(),
+            'for_user_id'=>$p->user_id,
+            'for_id'=>$p->id,
+            'data'=>$p->code,
+            'title'=>'تغییر وضعیت پروژه شما',
+            'body'=>$body,
+            'icon'=>'monitor',
+        ]);
         return redirect(route('admin.order', ['code' => $p->code]));
     }
 
@@ -429,6 +471,20 @@ class OrdersController extends Controller
                 'host_password'=>$request->host_pass,
             ]);
         }
+
+        $link = route('order',['code'=>$p->code]);
+        $body = " با سلام \n {$p->user->name} عزیز وضعیت پروژه شما به <span class='c-green'>تحویل پروژه</span> تغییر کرد.اطلاعات دسترسی سایت شما ارسال گردید.
+ <div class='mt-3 text-start'><a href='$link' style='padding: 11px 18px;' class='me-2 btn btn--primary outline'>مشاهده پروژه</a></div>
+ ";
+        Notification::create([
+            'user_id'=>auth()->id(),
+            'for_user_id'=>$p->user_id,
+            'for_id'=>$p->id,
+            'data'=>$p->code,
+            'title'=>'تغییر وضعیت پروژه شما',
+            'body'=>$body,
+            'icon'=>'monitor',
+        ]);
         return redirect(route('admin.order', ['code' => $p->code]));
     }
 }
