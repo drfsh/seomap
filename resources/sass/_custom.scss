@@ -689,50 +689,57 @@ svg.st-red path {
     background: #2f5bea;
     bottom: -13px;
 }
+.home .top .slide {
+    width: 100%;
+}
 .home .top .texts {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 189px;
-    margin-right: -158px;
-    margin-left: 103px;
+    margin-right: -9%;
+    margin-left: 112px;
     z-index: 2;
 }
 .home .top .texts .name{
-    font-size: 105px;
+    font-size: 80px;
     font-weight: 800;
     color: #2f5bea;
 }
 .home .top .texts .info{
-    font-size: 28px;
+    font-size: 23px;
     font-weight: 600;
-    margin-top: 8px;
+    margin-top: 5px;
+}
+.home .top .texts .slide img{
+    width: 101%;
 }
 .home .top .btns{
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .home .top .btns a {
-    padding: 10px 40px;
+    padding: 7px 28px;
     border-radius: 34px;
     color: white;
     background: #2f5bea;
-    margin-left: 14px;
-    font-size: 17px;
+    margin-left: 5px;
+    font-size: 16px;
+    white-space: nowrap;
 }
 .home .top .btns .back{
     margin: 0;
     background: #b3b3b3;
 }
 .info-t{
-    margin-bottom: 24px;
-    font-size: 25px;
+    margin-bottom: 16px;
+    font-size: 17px;
     font-weight: 500;
     color: #303030;
 }
 .boxes .item img{
-    width: 105px;
+    width: 90px;
 }
 .boxes .item{
     display: flex;
@@ -740,25 +747,80 @@ svg.st-red path {
     align-items: center;
 }
 .boxes .item .name{
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 600;
-    margin-top: 30px;
+    margin-top: 18px;
+    text-align: center;
 }
 
 .boxes .item .info{
-    font-size: 17px;
-    margin-top: 20px;
+    font-size: 13px;
+    margin-top: 15px;
     font-weight: 500;
+    text-align: center;
 }
-.boxes{
+.boxes {
     padding: 0 34px;
+    max-width: 990px;
+    margin: 5px auto auto;
 }
-.home .bottom{
-    margin-bottom: 44px;
-    margin-top: 19px;
-    font-size: 20px;
+.home .bottom {
+    margin-bottom: 28px;
+    margin-top: 9px;
+    font-size: 16px;
     font-weight: 500;
 }
 .home .bottom span{
     font-weight: 800;
+}
+.home .top{
+    justify-content: center;
+}
+.home .top .slide img{
+    width: 60%;
+}
+.home .s{
+    margin-top: -100px;
+    z-index: -1;
+    position: relative;
+}
+@media (max-width: 994px) {
+    .home .top .slide{
+        text-align: center;
+    }
+    .home .top .slide img{
+        width: 48%;
+        margin-top: 10px;
+    }
+    .home .top{
+        flex-direction: column-reverse;
+    }
+    .home .top .texts{
+        margin: 0 0 90px;
+    }
+    .boxes .item{
+        margin-bottom: 30px;
+    }
+    .home .top .texts .name{
+        font-size: 65px;
+    }
+    .home .top .texts .info{
+        font-size: 24px;
+    }
+    .boxes .item .info{
+        font-size: 13px;
+    }
+    .home .top .btns a{
+        margin-left: 7px;
+        padding: 10px 25px;
+    }
+    .info-t{
+        font-size: 17px;
+    }
+    .boxes .item .name{
+        font-size: 20px;
+    }
+    .home .bottom{
+        font-size: 15px;
+    }
 }

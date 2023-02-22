@@ -16,39 +16,39 @@
     <div class="text-center">
         <div class="info-t">مجموعه تیم طراحی و برنامه نویسی سئومپ</div>
         <div class="info-t">ضمانت موفقیت مشتریان در توسعه کسب و کار آنلاین</div>
-        <img class="mt-4" src="/images/home/dot.svg">
+        <img class="mt-3 mb-4" src="/images/home/dot.svg">
     </div>
     <div class="boxes row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-6">
             <div class="item">
-                <img src="/images/home/programing.svg">
+                <img src="/images/home/supporting.svg">
                 <div class="name">پشتیبانی و مشاوره</div>
                 <div class="info">بصورت 24 ساعته</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="item">
-                <img src="/images/home/developer.svg">
-                <div class="name">طراحی و توسعه</div>
-                <div class="info">CMS wordpress</div>
-            </div>
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-6">
             <div class="item">
                 <img src="/images/home/seo%20&%20optimization.svg">
                 <div class="name">سئو و بهینه سازی</div>
                 <div class="info">SEO & OPTIMIZATION</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-6">
             <div class="item">
-                <img src="/images/home/supporting.svg">
+                <img src="/images/home/developer.svg">
+                <div class="name">طراحی و توسعه</div>
+                <div class="info">CMS wordpress</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="item">
+                <img src="/images/home/programing.svg">
                 <div class="name">برنامه نویسی</div>
                 <div class="info">PHP - Laravel - Vue</div>
             </div>
         </div>
     </div>
-    <div class="text-center">
+    <div class="text-center s">
         <img width="98%" src="/images/home/div%23services-items_after.svg">
     </div>
     <div class="text-center bottom">

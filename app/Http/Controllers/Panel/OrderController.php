@@ -251,7 +251,7 @@ class OrderController extends Controller
         $dontPay = 0;
         $pay = 0;
         foreach ($i as $v) {
-            if ($v->status != 1) {
+            if ($v->status == 0) {
                 $pay = $v->id;
                 $dontPay++;
             }

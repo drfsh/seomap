@@ -14,11 +14,11 @@ use Inertia\Inertia;
 class TicketController extends Controller
 {
     public function list(){
-        $tickets = Ticket::where('user_id',auth()->id())->orderBy('created_at','desc')->paginate(5);
-        $tComing = Ticket::where([['user_id',auth()->id()],['status',0]])->count();
-        $tProcess = Ticket::where([['user_id',auth()->id()],['status',1]])->count();
-        $tOk = Ticket::where([['user_id',auth()->id()],['status',2]])->count();
-        $tFinish = Ticket::where([['user_id',auth()->id()],['status',3]])->count();
+        $tickets = Ticket::orderBy('created_at','desc')->paginate(5);
+        $tComing = Ticket::where([['status',0]])->count();
+        $tProcess = Ticket::where([['status',1]])->count();
+        $tOk = Ticket::where([['status',2]])->count();
+        $tFinish = Ticket::where([['status',3]])->count();
         return Inertia::render('Admin/Tickets',[
             'tickets'=>$tickets,
             'tComing'=>$tComing,

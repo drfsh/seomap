@@ -53,7 +53,7 @@ class DashboardController extends Controller
         foreach ($project as $value){
             $i = $value->invoices;
             foreach ($i as $item)
-                if ($item->status!=1){
+                if ($item->status==0){
                     $c = true;
                     break;
                 }
