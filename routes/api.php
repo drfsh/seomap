@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Telegram\BotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +18,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('login',[LoginController::class,'login']);
-Route::get('register',[RegisterController::class,'login']);
+Route::get('telegram',[BotController::class,'index']);
