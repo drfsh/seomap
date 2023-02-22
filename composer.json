@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "eleirbag89/telegrambotphp": "^1.4",
         "evryn/laravel-toman": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "hekmatinasser/notowo": "^1.0",

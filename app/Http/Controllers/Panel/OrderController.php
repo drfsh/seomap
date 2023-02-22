@@ -336,7 +336,7 @@ class OrderController extends Controller
             ]);
         } else {
             $invoice2 = Invoice::create([
-                'info' => 'قسط اول',
+                'info' => 'پرداخت اول',
                 'amount' => $amount,
                 'project_id' => $id,
                 'data' => 2
@@ -371,7 +371,7 @@ class OrderController extends Controller
         }
 
         $invoice2 = Invoice::create([
-            'info' => " قسط " . sizeof($invoice) ,
+            'info' => " پرداخت " . sizeof($invoice) ,
             'amount' => $amount,
             'project_id' => $id,
             'data' => 5

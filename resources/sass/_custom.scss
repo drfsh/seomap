@@ -689,3 +689,76 @@ svg.st-red path {
     background: #2f5bea;
     bottom: -13px;
 }
+.home .top .texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 189px;
+    margin-right: -158px;
+    margin-left: 103px;
+    z-index: 2;
+}
+.home .top .texts .name{
+    font-size: 105px;
+    font-weight: 800;
+    color: #2f5bea;
+}
+.home .top .texts .info{
+    font-size: 28px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+.home .top .btns{
+    margin-top: 50px;
+}
+
+.home .top .btns a {
+    padding: 10px 40px;
+    border-radius: 34px;
+    color: white;
+    background: #2f5bea;
+    margin-left: 14px;
+    font-size: 17px;
+}
+.home .top .btns .back{
+    margin: 0;
+    background: #b3b3b3;
+}
+.info-t{
+    margin-bottom: 24px;
+    font-size: 25px;
+    font-weight: 500;
+    color: #303030;
+}
+.boxes .item img{
+    width: 105px;
+}
+.boxes .item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.boxes .item .name{
+    font-size: 28px;
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+.boxes .item .info{
+    font-size: 17px;
+    margin-top: 20px;
+    font-weight: 500;
+}
+.boxes{
+    padding: 0 34px;
+}
+.home .bottom{
+    margin-bottom: 44px;
+    margin-top: 19px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.home .bottom span{
+    font-weight: 800;
+}

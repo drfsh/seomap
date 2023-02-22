@@ -27,8 +27,10 @@ use Inertia\Inertia;
 
 Route::get('/test',[DashboardController::class, 'test']);
 
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'view'])->name('home');
+
 Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'view'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('/api/countAlert', [DashboardController::class, 'countAlert'])->name('countAlert');
     Route::get('/api/infoSlider', [DashboardController::class, 'infoSlider'])->name('infoSlider');
 
