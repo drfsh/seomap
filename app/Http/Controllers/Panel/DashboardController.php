@@ -64,7 +64,8 @@ class DashboardController extends Controller
 
     use Smstrait;
     public function test(){
-        return $this->sendTrue(Notification::latest()->first(),[]);
-        dd(Notification::latest()->first());
+        $text = '/start';
+        $keywords = preg_split("/[\s,]+/", $text);
+        dd($keywords);
     }
 }
