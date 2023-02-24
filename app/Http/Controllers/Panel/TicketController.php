@@ -7,11 +7,13 @@ use App\Http\Requests\TicketStoreRequest;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\Ticket;
+use App\Traits\AdminTelegram;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TicketController extends Controller
 {
+    use AdminTelegram;
     public function list(){
         Ticket::where('user_id',auth()->id())->update([
             'new'=>false
@@ -50,6 +52,7 @@ class TicketController extends Controller
     public function store(TicketStoreRequest $request){
 
         $user_id = auth()->id();
+        $name = auth()->user()->name;
         $ticket = new Ticket();
         $ticket->title = $request->title;
         $ticket->dep = $request->dep;
@@ -68,6 +71,12 @@ class TicketController extends Controller
             $message->file = $path;
         }
         $message->save();
+
+        $this->adminNotificarion("تیکت جدید \n
+        کاربر : $name \n
+        موضوع : $request->title \n
+        متن : $request->text \n
+        ");
 
         return redirect(route('ticket.view',['code'=>$ticket->code]));
     }
@@ -94,6 +103,12 @@ class TicketController extends Controller
         }
         $message->save();
 
+        $name = auth()->user()->name;
+        $this->adminNotificarion("پاسخ تیکت جدید \n
+        کاربر : $name \n
+        موضوع : $ticket->title \n
+        متن : $request->text \n
+        ");
         return redirect(route('ticket.view',['code'=>$ticket->code]));
     }
 
