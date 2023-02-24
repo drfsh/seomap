@@ -29,19 +29,19 @@ class BotController extends Controller
                         if (!$user){
                             $text = "شماره تلفن اشتباه میباشد.";
                         }else{
-//                            $history = BotHistory::where('chat_id',$chat_id)->first();
-//                            if (!$history){
-//                                BotHistory::create([
-//                                    'user_id'=>$user->id,
-//                                    'chat_id'=>$chat_id,
-//                                    'permission'=>'admin'
-//                                ]);
-//                            }else{
-//                                $history->chat_id = $chat_id;
-//                                $history->user_id = $user->id;
-//                                $history->permission = 'admin';
-//                                $history->save();
-//                            }
+                            $history = BotHistory::where('chat_id',$chat_id)->first();
+                            if (!$history){
+                                BotHistory::create([
+                                    'user_id'=>$user->id,
+                                    'chat_id'=>$chat_id,
+                                    'permission'=>'admin'
+                                ]);
+                            }else{
+                                $history->chat_id = $chat_id;
+                                $history->user_id = $user->id;
+                                $history->permission = 'admin';
+                                $history->save();
+                            }
                             $text = "$user->name  با موفقیت به سیستم مدیریت متصل شدید. ";
                         }
                         $content = array("chat_id" => $chat_id, 'text' => $text);

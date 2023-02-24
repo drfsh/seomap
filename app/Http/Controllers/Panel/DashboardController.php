@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\Project;
 use App\Models\seen;
 use App\Models\Ticket;
+use App\Traits\AdminTelegram;
 use App\Traits\Smstrait;
 use Carbon\Carbon;
 use Inertia\Inertia;
@@ -62,10 +63,8 @@ class DashboardController extends Controller
 
     }
 
-    use Smstrait;
+    use Smstrait,AdminTelegram;
     public function test(){
-        $text = '/start';
-        $keywords = preg_split("/[\s,]+/", $text);
-        dd($keywords);
+        $this->adminNotificarion('test message');
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Entry;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Traits\AdminTelegram;
 use App\Traits\Smstrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,10 +18,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Telegram;
 
 class AuthenticatedSessionController extends Controller
 {
-    use Smstrait;
+    use Smstrait,AdminTelegram;
 
     /**
      * Display the login view.
@@ -54,6 +56,7 @@ class AuthenticatedSessionController extends Controller
                 'name' => $name,
                 'password' => Hash::make(Str::random(8))
             ]);
+            $this->adminNotificarion(" کاربر جدید به نام : $name");
         }
         $code = mt_rand(1000, 9999);
         $entry = Entry::where('user_id',$user->id)->first();
