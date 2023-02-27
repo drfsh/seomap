@@ -72,7 +72,7 @@ class TicketController extends Controller
         }
         $message->save();
 
-        $this->adminNotificarion("✳تیکت جدید \n🚹کاربر : $name \n🅰موضوع : $request->title \nمتن🗯 : $request->text");
+        $this->adminNotificarion("✳تیکت جدید \n🚹کاربر : $name \n🅰موضوع : $request->title \n🗯متن : $request->text");
 
         return redirect(route('ticket.view',['code'=>$ticket->code]));
     }
@@ -100,7 +100,7 @@ class TicketController extends Controller
         $message->save();
 
         $name = auth()->user()->name;
-        $this->adminNotificarion("✳پاسخ تیکت جدید \n🚹کاربر : $name \n🅰موضوع : $ticket->title \nمتن🗯 : $request->text \n");
+        $this->adminNotificarion("✳پاسخ تیکت جدید \n🚹کاربر : $name \n🅰موضوع : $ticket->title \n🗯متن : $request->text \n");
         return redirect(route('ticket.view',['code'=>$ticket->code]));
     }
 
